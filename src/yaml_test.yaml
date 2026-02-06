@@ -1,0 +1,19 @@
+import yaml
+
+def yaml_memory_test():
+    print("** YAML Parsing Test **")
+
+    # Define a simple YAML content as a string
+    yaml_content = """
+    example:
+      key: value
+    """
+    try:
+        parsed_data = yaml.safe_load(yaml_content)
+        print("Successfully parsed YAML content:")
+        print(parsed_data)
+    except yaml.YAMLError as e:
+        print(f"YAML parsing error: {e}")
+
+if __name__ == "__main__":
+    yaml_memory_test()

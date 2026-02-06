@@ -1,0 +1,24 @@
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+
+# Pytest
+.pytest_cache/
+
+# Virtual envs
+.venv/
+venv/
+
+# Local data and outputs
+dev_data/
+_processed/
+inbox_photos_extended/
+
+# Local secrets / credentials
+oai_key.txt
+/config.yaml
+
+# OS / editor
+.DS_Store
+Thumbs.db

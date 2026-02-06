@@ -1,0 +1,6 @@
+example:
+  key: value
+  items:
+    - one
+    - two
+    - three
