@@ -1,0 +1,5 @@
+[Environment]::SetEnvironmentVariable("AZURE_COMPUTER_VISION_KEY", "your-key-value", "User")
+[Environment]::SetEnvironmentVariable("AZURE_COMPUTER_VISION_ENDPOINT", "your-endpoint-url", "User")
+[Environment]::SetEnvironmentVariable("OPENAI_API_KEY", "your-openai-key", "User")
+[Environment]::SetEnvironmentVariable("DISCOGS_TOKEN", "your-discogs-token", "User")
+[Environment]::SetEnvironmentVariable("MUSICBRAINZ_USER_AGENT", "your-app-user-agent-string", "User")

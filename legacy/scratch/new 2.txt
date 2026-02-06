@@ -1,0 +1,4 @@
+import os
+
+subscription_key = os.getenv("AZURE_COMPUTER_VISION_KEY")
+endpoint = os.getenv("AZURE_COMPUTER_VISION_ENDPOINT")
