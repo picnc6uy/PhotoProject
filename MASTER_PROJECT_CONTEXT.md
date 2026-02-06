@@ -7,13 +7,14 @@ The Continue project is an AI-powered photo cataloging and record metadata manag
 
 Key features:
 - Image preprocessing and resizing for OCR and description generation.
-- Enhanced preprocessing pipeline using CLAHE and bilateral denoising, with smooth-plus mode (background normalization + gamma) as default; binary threshold/morph close remains available.
+- Enhanced preprocessing pipeline using CLAHE and bilateral denoising, with smooth mode (CLAHE + bilateral + sharpen) as default; smooth-plus (background normalization + gamma) and binary threshold/morph close remain available.
 - Azure Computer Vision OCR for raw text extraction.
 - OpenAI GPT-based parsing of OCR text into structured metadata.
 - Metadata enrichment via Discogs, MusicBrainz, and other sources.
+- Normalization and reconciliation prior to enrichment, including review suggestions for likely OCR catalog conflicts.
 - Comprehensive metadata catalog management (loading, saving, searching).
 - Configured via YAML files and environment variables.
-- Robust testing covering preprocessing, OCR extraction, API calls, parsing, enrichment, and pipeline integration.
+- Testing covers preprocessing, OCR extraction, parsing, and pipeline integration; enrichment validation is pending.
 - Designed incrementally with clear module separation, logging, error handling, and modular object-oriented pipeline components.
   - Operational details and tuning parameters live in docs/DEV_NOTES.md and src/config.yaml.
 
@@ -23,12 +24,13 @@ Key features:
 
 The project follows a sequential pipeline to process photos into enriched metadata catalog entries:
 
-- Images are preprocessed (grayscale, denoising, sharpening). Default mode is smooth-plus; binary OCR mode is optional.
+- Images are preprocessed (grayscale, denoising, sharpening). Default mode is smooth; smooth-plus and binary OCR modes are optional.
 - Resized to Azure OCR max dimension constraints (4200 pixels max).
 - Saved with JPEG compression quality targeting under 4 MB file size.
 - Excessively large files are further compressed and resized iteratively.
 - OCR text extraction via Azure OCR service.
 - Parsing OCR text to structured JSON metadata using OpenAI GPT.
+- Normalize parsed metadata (preserve raw values, add normalized fields) and generate review suggestions for likely OCR conflicts.
 - Metadata enrichment querying external music data sources.
 - Validation and error handling of metadata for consistency.
 - Final validated metadata compiled into the record catalog.
@@ -64,7 +66,7 @@ Each pipeline stage is implemented as a modular object-oriented component with c
 
 ## Agent Contract Summary
 
-- Agent uses OpenAI gpt-4.1-mini model.
+- Agent uses OpenAI Codex with GPT-5.
 - Full workspace file read/write access within workspace root.
 - Internet usage limited to official docs and primary sources.
 - Strict local system truthfulness: no claims without explicit tool outputs.
