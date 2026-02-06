@@ -1,6 +1,6 @@
 ## 1. Image Preprocessing and OCR Preparation (Last updated: 2026-02-06)
 Note: Verify checklist status against docs/DEV_NOTES.md (source of current run results).
-Verified today (2026-02-06): photo cataloging, preprocessing, OCR to CSV (see docs/DEV_NOTES.md).
+Verified today (2026-02-06): photo cataloging, preprocessing, OCR to CSV, pipeline rerun after refactors (see docs/DEV_NOTES.md).
 - [x] Implement grayscale, denoising, binarization, and sharpening steps
 - [x] Resize images to meet Azure OCR maximum dimension requirements
 - [x] Ensure image compression and size limits (4MB) compliance

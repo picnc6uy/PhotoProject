@@ -57,3 +57,4 @@ Config keys (src/config.yaml):
   - dev_data/record_catalog/data/inbox_photos_ocr
 - OCR completed with throttling; OCR CSV written:
   - dev_data/record_catalog/data/ocr_texts.csv
+- Pipeline re-run after refactors; OCR CSV confirmed written.
