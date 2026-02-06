@@ -13,9 +13,9 @@ class ImageProcessor:
     """Handles image preprocessing, resizing and preparation for OCR.
 
     The `preprocess_image_for_ocr` method implements the validated modern preprocessing pipeline
-    including grayscale, CLAHE (adaptive histogram equalization), bilateral denoising, adaptive
-    thresholding, morphological closing, and sharpening. This method is used by default in all
-    pipeline image resizing and preprocessing before OCR submission.
+    including grayscale, CLAHE (adaptive histogram equalization), bilateral denoising, and sharpening.
+    Thresholding + morphological closing is available in binary mode. Smooth and smooth-plus modes
+    are the current defaults and are controlled by PREPROCESS_MODE.
     """
 
     def __init__(self, config):

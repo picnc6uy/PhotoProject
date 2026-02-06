@@ -1,5 +1,6 @@
 import os
 import time
+import logging
 from azure.cognitiveservices.vision.computervision import ComputerVisionClient
 from msrest.authentication import CognitiveServicesCredentials
 
@@ -8,6 +9,7 @@ class OCRService:
 
     def __init__(self, config):
         self.config = config
+        self.logger = logging.getLogger(self.__class__.__name__)
         subscription_key = config.get("AZURE_COMPUTER_VISION_KEY")
         endpoint = config.get("AZURE_COMPUTER_VISION_ENDPOINT")
         self.subscription_key = subscription_key
@@ -15,17 +17,20 @@ class OCRService:
         self.client = ComputerVisionClient(endpoint=endpoint, credentials=CognitiveServicesCredentials(subscription_key))
 
     def submit_image_for_ocr(self, image_path: str) -> str:
-        print(f"Using Azure endpoint: {self.endpoint}")
-        print(f"Using Azure subscription key: {'***' + str(self.subscription_key)[-4:] if self.subscription_key else None}")
+        self.logger.info("Using Azure endpoint: %s", self.endpoint)
+        self.logger.info(
+            "Using Azure subscription key: %s",
+            ('***' + str(self.subscription_key)[-4:]) if self.subscription_key else None
+        )
         try:
             with open(image_path, 'rb') as img_stream:
                 ocr_result = self.client.read_in_stream(img_stream, raw=True)
         except Exception as e:
-            print(f"Error submitting image {image_path} for OCR: {e}")
+            self.logger.error("Error submitting image %s for OCR: %s", image_path, e)
             return ""
 
         if not ocr_result or not hasattr(ocr_result, 'headers'):
-            print(f"Error: Invalid response from OCR service for {image_path}")
+            self.logger.error("Invalid response from OCR service for %s", image_path)
             return ""
         operation_location = ocr_result.headers.get("Operation-Location", "")
         operation_id = operation_location.split("/")[-1] if operation_location else ""

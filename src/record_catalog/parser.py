@@ -1,4 +1,5 @@
 import json
+import logging
 import openai
 from record_catalog.config_manager import ConfigManager
 
@@ -7,6 +8,7 @@ class OCRParser:
 
     def __init__(self, config: ConfigManager):
         self.config = config
+        self.logger = logging.getLogger(self.__class__.__name__)
         self.api_key = config.get("OPENAI_API_KEY")
         openai.api_key = self.api_key
 
@@ -25,7 +27,7 @@ OCR Text:
 
     def parse_text(self, ocr_text: str) -> dict:
         if not self.api_key:
-            print("OpenAI API key not set. Parsing aborted.")
+            self.logger.warning("OpenAI API key not set. Parsing aborted.")
             return {}
 
         prompt = self._build_parse_prompt(ocr_text)
@@ -37,21 +39,20 @@ OCR Text:
                 max_tokens=350,
                 temperature=0.0,
             )
-            print(f"OpenAI response object ID: {response.id}")
+            self.logger.info("OpenAI response object ID: %s", response.id)
             content = response.choices[0].message.content
-            print(f"OpenAI raw response content:\n{content}")
+            self.logger.debug("OpenAI raw response content:\n%s", content)
 
             # Strip markdown fences if present
             if content and content.startswith("```json") and content.endswith("```"):
                 content = content[len("```json"): -3].strip()
 
             if not content:
-                print("Error: Empty response content from OpenAI")
+                self.logger.error("Empty response content from OpenAI")
                 return {}
 
             parsed = json.loads(content)
-            print("Parsed metadata:")
-            print(parsed)
+            self.logger.info("Parsed metadata: %s", parsed)
 
             # Normalize key naming for downstream pipeline compatibility
             if "CatalogNumber" in parsed and "Catalog Number" not in parsed:
@@ -59,11 +60,11 @@ OCR Text:
 
             null_fields = [k for k, v in parsed.items() if v is None]
             if null_fields:
-                print(f"Warning: These fields were missing or uncertain and set to null: {null_fields}")
+                self.logger.warning("Fields missing or uncertain and set to null: %s", null_fields)
 
             return parsed
         except Exception as e:
-            print(f"OpenAI parsing error: {e}")
+            self.logger.error("OpenAI parsing error: %s", e)
             return {}
 
     def batch_parse(self, ocr_texts: list[str]) -> list[dict]:
