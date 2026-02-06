@@ -47,6 +47,7 @@ Config keys (src/config.yaml):
 ## Repo Standards (Canonical Sources)
 - Tests: `src/tests` is canonical; legacy tests live in `tests/`, `src/tests_backup/`, `src/tests/archive/` and are excluded by `pytest.ini`.
 - Config: pipeline config is `src/config.yaml`. Root `config.yaml` is a Continue/IDE config (not used by the pipeline).
+- Legacy materials are tracked under legacy/ (archived tests and sample artifacts).
 
 ## Verified Today (2026-02-06)
 - Photo cataloging test passed:

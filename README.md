@@ -24,3 +24,4 @@ AI-assisted photo cataloging pipeline for record labels. Processes images into O
 ## Repo notes
 - Canonical tests live in src/tests (legacy tests in tests/ and src/tests_backup are kept for reference).
 - Pipeline config is src/config.yaml (root config.yaml is Continue/IDE config).
+ - Legacy materials are tracked under legacy/ (archived tests and sample artifacts).
