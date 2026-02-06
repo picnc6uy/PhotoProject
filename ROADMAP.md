@@ -10,7 +10,7 @@ Verified today (2026-02-06): photo cataloging, preprocessing, OCR to CSV, pipeli
 - [x] Add stepwise pipeline execution option with CLI flag
 - [x] Test and optimize OCR and parsing pipeline stages
 - [x] Integrate improved preprocessing as the default method used in the main batch resizing pipeline (`ImageProcessor.preprocess_image_for_ocr`)
-  - Default is smooth-plus (CLAHE + bilateral + background normalization + gamma + sharpen)
+  - Default is smooth (CLAHE + bilateral + sharpen)
   - Binary OCR mode (adaptive threshold + morph close) is optional
 ## 2. OCR Extraction and Parsing
 - [x] Integrate Azure Computer Vision OCR API for raw text extraction using extended OCRService
@@ -18,9 +18,13 @@ Verified today (2026-02-06): photo cataloging, preprocessing, OCR to CSV, pipeli
 - [x] Develop and run isolated OCR test script targeting new folder `inbox_photos_processed` with absolute path
 - [x] Increase retry delay to mitigate 429 Too Many Requests errors
 - [x] Export OCR results to CSV for review and downstream processing
-- [ ] Integrate OpenAI API to parse Azure OCR output into structured metadata
-- [ ] Develop seamless pipeline integration between Azure OCR and OpenAI parsing
+- [x] Integrate OpenAI API to parse Azure OCR output into structured metadata
+- [x] Develop seamless pipeline integration between Azure OCR and OpenAI parsing
 - [ ] Implement error handling and data validation between OCR and parsing steps
+
+## 2b. Normalization and Reconciliation (Pre-enrichment)
+- [x] Preserve raw OCR fields and generate normalized fields
+- [x] Generate review suggestions for likely catalog-number OCR conflicts (near-row and fuzzy matches)
 
 ## 3. Metadata Enrichment and Cataloging
 - [ ] Query Discogs and MusicBrainz APIs for metadata enrichment

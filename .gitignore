@@ -22,3 +22,11 @@ oai_key.txt
 # OS / editor
 .DS_Store
 Thumbs.db
+
+# Continue/CLI session artifacts
+.continue/
+.continueignore
+.continuerc.json
+index/
+rules/
+sessions/

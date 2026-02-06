@@ -10,9 +10,14 @@
 ## Current State (Feb 6, 2026)
 - Photo cataloging test passes and writes CSV to:
   - dev_data/record_catalog/data/outputs/photo_catalog.csv
-- Preprocessing uses smooth-plus mode by default (see src/config.yaml).
-- OCR inbox populated with smooth-plus output:
+- Preprocessing uses smooth mode by default (see src/config.yaml).
+- OCR inbox populated with smooth output:
   - dev_data/record_catalog/data/inbox_photos_ocr
+- OCR CSV generated and parsed metadata CSV produced:
+  - dev_data/record_catalog/data/ocr_texts.csv
+  - dev_data/record_catalog/data/parsed_metadata.csv
+- Review suggestions CSV generated for potential OCR catalog conflicts:
+  - dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv
 
 ## Preprocessing Summary
 Implemented in src/record_catalog/image_processor.py:
@@ -21,7 +26,7 @@ Implemented in src/record_catalog/image_processor.py:
 - Binary OCR mode (threshold + morph close) remains available but is not default.
 
 Config keys (src/config.yaml):
-- PREPROCESS_MODE: ocr_smooth_plus (active)
+- PREPROCESS_MODE: ocr_smooth (active)
 - CLAHE_CLIP_LIMIT, CLAHE_TILE_GRID_SIZE
 - BILATERAL_D, BILATERAL_SIGMA_COLOR, BILATERAL_SIGMA_SPACE
 - BACKGROUND_KERNEL_SIZE, GAMMA_CORRECTION
@@ -57,4 +62,7 @@ Config keys (src/config.yaml):
   - dev_data/record_catalog/data/inbox_photos_ocr
 - OCR completed with throttling; OCR CSV written:
   - dev_data/record_catalog/data/ocr_texts.csv
-- Pipeline re-run after refactors; OCR CSV confirmed written.
+- Parsing completed; parsed metadata CSV written:
+  - dev_data/record_catalog/data/parsed_metadata.csv
+- Review suggestions generated for potential OCR catalog conflicts:
+  - dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv
