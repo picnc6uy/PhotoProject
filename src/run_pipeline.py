@@ -20,6 +20,11 @@ def main():
     parser.add_argument(
         "--stepwise", action="store_true", help="Run pipeline step-by-step with pauses"
     )
+    parser.add_argument(
+        "--stop-after",
+        choices=["photo_catalog", "preprocess", "ocr", "parse", "enrich", "catalog"],
+        help="Stop after the specified stage (non-interactive)",
+    )
     args = parser.parse_args()
 
     print("Loading configuration...")
@@ -30,6 +35,44 @@ def main():
     if args.stepwise:
         print("Running pipeline in stepwise mode...")
         pipeline.run_stepwise()
+    elif args.stop_after:
+        print(f"Running pipeline until stage: {args.stop_after}...")
+        pipeline.setup_components()
+
+        pipeline.run_photo_catalog()
+        if args.stop_after == "photo_catalog":
+            print("Stopping after photo cataloging.")
+            print("Pipeline finished.")
+            return
+
+        source_folder = config.get('SOURCE_PHOTO_FOLDER')
+        ocr_folder = config.get('OCR_IMAGE_FOLDER')
+        pipeline.run_image_preprocessing(source_folder, ocr_folder)
+        if args.stop_after == "preprocess":
+            print("Stopping after preprocessing.")
+            print("Pipeline finished.")
+            return
+
+        ocr_texts = pipeline.run_ocr(ocr_folder)
+        if args.stop_after == "ocr":
+            print("Stopping after OCR.")
+            print("Pipeline finished.")
+            return
+
+        parsed_metadatas = pipeline.run_parsing(ocr_texts)
+        if args.stop_after == "parse":
+            print("Stopping after parsing.")
+            print("Pipeline finished.")
+            return
+
+        enriched_metadatas = pipeline.run_enrichment(parsed_metadatas)
+        if args.stop_after == "enrich":
+            print("Stopping after enrichment.")
+            print("Pipeline finished.")
+            return
+
+        pipeline.run_catalog_save(enriched_metadatas)
+        print("Pipeline finished.")
     else:
         print("Running full catalog pipeline...")
         pipeline.run()

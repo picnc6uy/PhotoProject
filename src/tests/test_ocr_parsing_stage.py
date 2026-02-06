@@ -11,6 +11,7 @@ sys.path.insert(0, str(WORKSPACE_ROOT / 'src'))
 
 from record_catalog.config_manager import ConfigManager
 from record_catalog.parser import OCRParser
+from record_catalog.normalizer import MetadataNormalizer
 
 class TestOCRParsingStage:
     def __init__(self):
@@ -24,6 +25,7 @@ class TestOCRParsingStage:
         self.parsed_csv_path = str(WORKSPACE_ROOT / 'dev_data' / 'record_catalog' / 'data' / 'parsed_metadata.csv')
 
         self.parser = OCRParser(self.config)
+        self.normalizer = MetadataNormalizer()
 
         logging.basicConfig(
             level=logging.INFO,
@@ -48,6 +50,7 @@ class TestOCRParsingStage:
                     continue
 
                 parsed = self.parser.parse_text(ocr_text)
+                parsed = self.normalizer.normalize(parsed)
 
                 # Add the original filename for reference
                 parsed['filename'] = filename

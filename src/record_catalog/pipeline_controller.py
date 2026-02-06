@@ -9,6 +9,7 @@ from .enricher import MetadataEnricher
 from .catalog_manager import CatalogManager, CatalogEntry  # Updated import to include CatalogEntry
 from .photo_catalog_manager import PhotoCatalogManager  # New import for photo cataloging
 from .config_manager import ConfigManager
+from .normalizer import MetadataNormalizer
 
 class PipelineController:
     """Orchestrates the entire cataloging pipeline sequence.
@@ -33,6 +34,7 @@ class PipelineController:
         self.parser = OCRParser(self.config)
         self.enricher = MetadataEnricher(self.config)
         self.catalog_manager = CatalogManager(self.config)
+        self.normalizer = MetadataNormalizer()
 
     def run_photo_catalog(self):
         """Executes the photo cataloging process."""
@@ -104,7 +106,8 @@ class PipelineController:
         """Parses OCR texts to extract metadata."""
         print("Starting OCR text parsing...")
         parsed_metadatas = self.parser.batch_parse(ocr_texts)
-        return parsed_metadatas
+        normalized_metadatas = [self.normalizer.normalize(m) for m in parsed_metadatas]
+        return normalized_metadatas
 
     def run_enrichment(self, parsed_metadatas):
         """Enriches parsed metadata."""
