@@ -50,12 +50,10 @@ Config keys (src/config.yaml):
 - Legacy materials are tracked under legacy/ (archived tests and sample artifacts).
 
 ## Verified Today (2026-02-06)
-- Photo cataloging test passed:
-  - Command: pytest -q src/test_photo_catalog.py
-  - Output: dev_data/record_catalog/data/outputs/photo_catalog.csv
-- Image preprocessing test passed:
-  - Command: pytest -q src/tests/test_batch_resize_images.py
-- OCR inbox repopulated with smooth-plus output:
-  - Command: python src/batch_resize_images.py
-  - Output: dev_data/record_catalog/data/inbox_photos_ocr
-- Orientation auto-rotate tested and disabled (no improvement observed).
+- Git repo initialized; core files committed; legacy materials moved to legacy/ and tracked.
+- Photo cataloging completed and CSV generated:
+  - dev_data/record_catalog/data/outputs/photo_catalog.csv
+- Preprocessing completed (ocr_smooth mode) and OCR inbox repopulated:
+  - dev_data/record_catalog/data/inbox_photos_ocr
+- OCR completed with throttling; OCR CSV written:
+  - dev_data/record_catalog/data/ocr_texts.csv
