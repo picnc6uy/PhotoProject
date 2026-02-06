@@ -15,7 +15,8 @@ class MetadataEnricher:
             return {}
         headers = {"User-Agent": self.musicbrainz_user_agent}
         params = {
-            "release_title": catalog_number,
+            "catno": catalog_number,
+            "label": label,
             "per_page": 3,
             "page": 1,
             "token": self.discogs_token
@@ -28,16 +29,23 @@ class MetadataEnricher:
 
         url = "https://api.discogs.com/database/search"
         print(f"Querying Discogs with label='{label}', catalog_number='{catalog_number}', artist='{artist}', title='{title}'")
-        try:
-            response = requests.get(url, headers=headers, params=params, timeout=10)
-            data = response.json()
-            if data.get('results'):
-                print(f"Discogs returned {len(data['results'])} result(s)")
-                return data['results']
-            else:
+        for attempt in range(3):
+            try:
+                response = requests.get(url, headers=headers, params=params, timeout=10)
+                if response.status_code == 429:
+                    retry_after = response.headers.get("Retry-After")
+                    delay = int(retry_after) if retry_after and retry_after.isdigit() else 5 * (attempt + 1)
+                    print(f"Discogs rate limited (429). Sleeping {delay}s before retry...")
+                    time.sleep(delay)
+                    continue
+                data = response.json()
+                if data.get('results'):
+                    print(f"Discogs returned {len(data['results'])} result(s)")
+                    return data['results']
                 print("Discogs returned no results.")
-        except Exception as e:
-            print(f"Discogs API error: {e}")
+                return {}
+            except Exception as e:
+                print(f"Discogs API error: {e}")
         return {}
 
     def query_musicbrainz(self, title, artist):
@@ -50,24 +58,32 @@ class MetadataEnricher:
             "limit": 1
         }
         headers = {"User-Agent": self.musicbrainz_user_agent}
-        try:
-            response = requests.get(url, headers=headers, params=params, timeout=10)
-            data = response.json()
-            if 'releases' in data and data['releases']:
-                release = data['releases'][0]
-                return {
-                    "Release Date": release.get('date'),
-                    "Country": release.get('country'),
-                }
-        except Exception as e:
-            print(f"MusicBrainz API error: {e}")
+        for attempt in range(3):
+            try:
+                response = requests.get(url, headers=headers, params=params, timeout=10)
+                if response.status_code == 429:
+                    retry_after = response.headers.get("Retry-After")
+                    delay = int(retry_after) if retry_after and retry_after.isdigit() else 5 * (attempt + 1)
+                    print(f"MusicBrainz rate limited (429). Sleeping {delay}s before retry...")
+                    time.sleep(delay)
+                    continue
+                data = response.json()
+                if 'releases' in data and data['releases']:
+                    release = data['releases'][0]
+                    return {
+                        "Release Date": release.get('date'),
+                        "Country": release.get('country'),
+                    }
+                return {}
+            except Exception as e:
+                print(f"MusicBrainz API error: {e}")
         return {}
 
     def enrich_metadata(self, metadata: dict) -> dict:
-        label = metadata.get('Label')
-        catalog_number = metadata.get('Catalog Number')
-        artist = metadata.get('Artist')
-        title = metadata.get('Title')
+        label = metadata.get('Label Normalized') or metadata.get('Label')
+        catalog_number = metadata.get('Catalog Number Normalized') or metadata.get('Catalog Number')
+        artist = metadata.get('Artist Normalized') or metadata.get('Artist')
+        title = metadata.get('Title Normalized') or metadata.get('Title')
         discogs_results = self.query_discogs(label, catalog_number, artist, title)
 
         enriched = metadata.copy()

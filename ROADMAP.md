@@ -25,6 +25,7 @@ Verified today (2026-02-06): photo cataloging, preprocessing, OCR to CSV, pipeli
 ## 2b. Normalization and Reconciliation (Pre-enrichment)
 - [x] Preserve raw OCR fields and generate normalized fields
 - [x] Generate review suggestions for likely catalog-number OCR conflicts (near-row and fuzzy matches)
+- [x] Score Discogs candidates with side-pair reconciliation and field agreement penalties
 
 ## 3. Metadata Enrichment and Cataloging
 - [ ] Query Discogs and MusicBrainz APIs for metadata enrichment

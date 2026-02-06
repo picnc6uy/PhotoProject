@@ -18,6 +18,8 @@
   - dev_data/record_catalog/data/parsed_metadata.csv
 - Review suggestions CSV generated for potential OCR catalog conflicts:
   - dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv
+- Enrichment candidate scoring CSV generated (Discogs-backed):
+  - dev_data/record_catalog/data/outputs/enrichment_candidates.csv
 
 ## Preprocessing Summary
 Implemented in src/record_catalog/image_processor.py:
@@ -66,3 +68,5 @@ Config keys (src/config.yaml):
   - dev_data/record_catalog/data/parsed_metadata.csv
 - Review suggestions generated for potential OCR catalog conflicts:
   - dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv
+- Enrichment candidate ranking completed with Discogs lookups and fallback searches.
+- Candidate scoring now includes field agreement penalties and side-pair reconciliation.
