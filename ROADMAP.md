@@ -1,6 +1,6 @@
-## 1. Image Preprocessing and OCR Preparation (Last updated: 2026-02-06)
+## 1. Image Preprocessing and OCR Preparation (Last updated: 2026-02-09)
 Note: Verify checklist status against docs/DEV_NOTES.md (source of current run results).
-Verified today (2026-02-06): photo cataloging, preprocessing, OCR to CSV, pipeline rerun after refactors (see docs/DEV_NOTES.md).
+Verified today (2026-02-09): photo cataloging, preprocessing, OCR to CSV, parsing, reconciliation, resolved output, final archival exports (see docs/DEV_NOTES.md).
 - [x] Implement grayscale, denoising, binarization, and sharpening steps
 - [x] Resize images to meet Azure OCR maximum dimension requirements
 - [x] Ensure image compression and size limits (4MB) compliance
@@ -20,21 +20,24 @@ Verified today (2026-02-06): photo cataloging, preprocessing, OCR to CSV, pipeli
 - [x] Export OCR results to CSV for review and downstream processing
 - [x] Integrate OpenAI API to parse Azure OCR output into structured metadata
 - [x] Develop seamless pipeline integration between Azure OCR and OpenAI parsing
-- [ ] Implement error handling and data validation between OCR and parsing steps
+- [x] Implement error handling and data validation between OCR and parsing steps
 
 ## 2b. Normalization and Reconciliation (Pre-enrichment)
 - [x] Preserve raw OCR fields and generate normalized fields
 - [x] Generate review suggestions for likely catalog-number OCR conflicts (near-row and fuzzy matches)
 - [x] Score Discogs candidates with side-pair reconciliation and field agreement penalties
+- [x] Generate resolved enrichment output with confidence scoring
+- [x] Export final archival catalogs (consolidated and non-consolidated) with validation report
 
 ## 3. Metadata Enrichment and Cataloging
-- [ ] Query Discogs and MusicBrainz APIs for metadata enrichment
-- [ ] Develop consistency checks and validation logic
+- [x] Query Discogs API for metadata enrichment
+- [ ] Query MusicBrainz API for metadata enrichment (blocked: SSL EOF errors)
+- [x] Develop consistency checks and validation logic (validation report + Decca auto-fix)
 - [ ] Implement metadata catalog storage and search functionality
 
 ## 4. Pipeline Integration and Automation
-- [ ] Develop modular pipeline components for each processing stage
-- [ ] Implement end-to-end pipeline runs with logging
+- [x] Develop modular pipeline components for each processing stage
+- [x] Implement end-to-end pipeline runs with logging
 - [ ] Add testing for pipeline integration
 
 ## 5. Testing and QA

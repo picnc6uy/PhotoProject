@@ -1,5 +1,5 @@
 ---
-Last updated: 2026-02-06
+Last updated: 2026-02-09
 
 ## Project Summary
 
@@ -12,6 +12,7 @@ Key features:
 - OpenAI GPT-based parsing of OCR text into structured metadata.
 - Metadata enrichment via Discogs, MusicBrainz, and other sources.
 - Normalization and reconciliation prior to enrichment, including review suggestions for likely OCR catalog conflicts.
+- Resolved enrichment outputs and final archival exports (consolidated and non-consolidated) with validation reporting.
 - Comprehensive metadata catalog management (loading, saving, searching).
 - Configured via YAML files and environment variables.
 - Testing covers preprocessing, OCR extraction, parsing, and pipeline integration; enrichment validation is pending.
@@ -31,9 +32,9 @@ The project follows a sequential pipeline to process photos into enriched metada
 - OCR text extraction via Azure OCR service.
 - Parsing OCR text to structured JSON metadata using OpenAI GPT.
 - Normalize parsed metadata (preserve raw values, add normalized fields) and generate review suggestions for likely OCR conflicts.
-- Metadata enrichment querying external music data sources.
+- Metadata enrichment querying external music data sources (Discogs active; MusicBrainz currently disabled due to SSL EOF errors).
 - Validation and error handling of metadata for consistency.
-- Final validated metadata compiled into the record catalog.
+- Final validated metadata compiled into archival catalogs with a validation report.
 
 Each pipeline stage is implemented as a modular object-oriented component with comprehensive testing to ensure accuracy and reliability.
 

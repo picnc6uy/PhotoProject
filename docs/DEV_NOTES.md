@@ -7,7 +7,7 @@
 #
 # This file is for current state, recent changes, and operational notes.
 
-## Current State (Feb 6, 2026)
+## Current State (Feb 9, 2026)
 - Photo cataloging test passes and writes CSV to:
   - dev_data/record_catalog/data/outputs/photo_catalog.csv
 - Preprocessing uses smooth mode by default (see src/config.yaml).
@@ -20,6 +20,13 @@
   - dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv
 - Enrichment candidate scoring CSV generated (Discogs-backed):
   - dev_data/record_catalog/data/outputs/enrichment_candidates.csv
+- Resolved enrichment output generated:
+  - dev_data/record_catalog/data/outputs/enriched_resolved.csv
+- Final archival exports generated:
+  - dev_data/record_catalog/data/outputs/final_archival_catalog.csv
+  - dev_data/record_catalog/data/outputs/final_archival_catalog_consolidated.csv
+- Validation report generated:
+  - dev_data/record_catalog/data/outputs/catalog_validation_report.csv
 
 ## Preprocessing Summary
 Implemented in src/record_catalog/image_processor.py:
@@ -50,13 +57,14 @@ Config keys (src/config.yaml):
 ## Notes / Known Issues
 - Roadmap checkboxes may be ahead of verified status; keep ROADMAP.md accurate.
 - OCR/Parser/Enrichment stages require live API keys and incur cost.
+- MusicBrainz is currently disabled (SSL EOF errors); Discogs-only enrichment is active.
 
 ## Repo Standards (Canonical Sources)
 - Tests: `src/tests` is canonical; legacy tests live in `tests/`, `src/tests_backup/`, `src/tests/archive/` and are excluded by `pytest.ini`.
 - Config: pipeline config is `src/config.yaml`. Root `config.yaml` is a Continue/IDE config (not used by the pipeline).
 - Legacy materials are tracked under legacy/ (archived tests and sample artifacts).
 
-## Verified Today (2026-02-06)
+## Verified Today (2026-02-09)
 - Git repo initialized; core files committed; legacy materials moved to legacy/ and tracked.
 - Photo cataloging completed and CSV generated:
   - dev_data/record_catalog/data/outputs/photo_catalog.csv
@@ -70,6 +78,9 @@ Config keys (src/config.yaml):
   - dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv
 - Enrichment candidate ranking completed with Discogs lookups and fallback searches.
 - Candidate scoring now includes field agreement penalties and side-pair reconciliation.
+- Resolved enrichment CSV generated and final archival exports produced.
+- Consolidated output merges duplicate catalog numbers (multi-photo sides) and auto-fixes Decca K-prefixes.
+- Validation report produced (known missing catalog for photo_0047.jpg).
 
 ## Data Handling Scheme (Current)
 Primary data flow and outputs:
@@ -87,3 +98,9 @@ Primary data flow and outputs:
    - dev_data/record_catalog/data/outputs/enrichment_candidates.csv
 7) Enrichment output (resolved metadata + confidence) -> resolved CSV:
    - dev_data/record_catalog/data/outputs/enriched_resolved.csv
+8) Final archival export (non-consolidated) -> archival CSV:
+   - dev_data/record_catalog/data/outputs/final_archival_catalog.csv
+9) Final archival export (consolidated) -> archival CSV:
+   - dev_data/record_catalog/data/outputs/final_archival_catalog_consolidated.csv
+10) Validation report -> report CSV:
+   - dev_data/record_catalog/data/outputs/catalog_validation_report.csv
