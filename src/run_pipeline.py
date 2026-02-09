@@ -22,7 +22,7 @@ def main():
     )
     parser.add_argument(
         "--stop-after",
-        choices=["photo_catalog", "preprocess", "ocr", "parse", "enrich", "catalog"],
+        choices=["photo_catalog", "preprocess", "ocr", "parse", "resolve"],
         help="Stop after the specified stage (non-interactive)",
     )
     args = parser.parse_args()
@@ -53,25 +53,23 @@ def main():
             print("Pipeline finished.")
             return
 
-        ocr_texts = pipeline.run_ocr(ocr_folder)
+        ocr_rows = pipeline.run_ocr(ocr_folder)
         if args.stop_after == "ocr":
             print("Stopping after OCR.")
             print("Pipeline finished.")
             return
 
-        parsed_metadatas = pipeline.run_parsing(ocr_texts)
+        pipeline.run_parsing(ocr_rows)
         if args.stop_after == "parse":
             print("Stopping after parsing.")
             print("Pipeline finished.")
             return
 
-        enriched_metadatas = pipeline.run_enrichment(parsed_metadatas)
-        if args.stop_after == "enrich":
-            print("Stopping after enrichment.")
+        pipeline.run_reconciliation_and_resolve()
+        if args.stop_after == "resolve":
+            print("Stopping after resolve.")
             print("Pipeline finished.")
             return
-
-        pipeline.run_catalog_save(enriched_metadatas)
         print("Pipeline finished.")
     else:
         print("Running full catalog pipeline...")

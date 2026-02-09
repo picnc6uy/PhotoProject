@@ -10,6 +10,9 @@ from .catalog_manager import CatalogManager, CatalogEntry  # Updated import to i
 from .photo_catalog_manager import PhotoCatalogManager  # New import for photo cataloging
 from .config_manager import ConfigManager
 from .normalizer import MetadataNormalizer
+from .reconcile import build_review_suggestions
+from .candidate_ranker import build_enrichment_candidates
+from .resolved_builder import build_resolved_enriched
 
 class PipelineController:
     """Orchestrates the entire cataloging pipeline sequence.
@@ -54,7 +57,6 @@ class PipelineController:
     def run_ocr(self, ocr_folder):
         """Executes OCR processing on resized images."""
         print("Starting OCR processing...")
-        ocr_texts = []
         ocr_rows = []
         delay_seconds = self.config.get("OCR_INTER_IMAGE_DELAY", 7)
         max_retries = self.config.get("MAX_OCR_RETRIES", 3)
@@ -81,13 +83,12 @@ class PipelineController:
                         break
                 text = ocr_result.get('text', '')
                 print(f"OCR extracted {len(text)} chars from {filename}")
-                ocr_texts.append(text)
                 ocr_rows.append({"filename": filename, "ocr_text": text})
                 time.sleep(delay_seconds)
 
         self._save_ocr_csv(ocr_rows)
 
-        return ocr_texts
+        return ocr_rows
 
     def _save_ocr_csv(self, ocr_rows: list[dict]):
         """Write OCR results to CSV for downstream parsing."""
@@ -102,12 +103,58 @@ class PipelineController:
                 writer.writerow(row)
         print(f"OCR results saved to {ocr_csv_path}")
 
-    def run_parsing(self, ocr_texts):
-        """Parses OCR texts to extract metadata."""
+    def run_parsing(self, ocr_rows: list[dict]):
+        """Parses OCR texts to extract metadata and writes parsed CSV."""
         print("Starting OCR text parsing...")
-        parsed_metadatas = self.parser.batch_parse(ocr_texts)
+        parsed_metadatas = []
+        for row in ocr_rows:
+            text = row.get("ocr_text", "")
+            if not text:
+                continue
+            parsed = self.parser.parse_text(text)
+            if not parsed:
+                continue
+            parsed["filename"] = row.get("filename")
+            parsed_metadatas.append(parsed)
         normalized_metadatas = [self.normalizer.normalize(m) for m in parsed_metadatas]
+        self._save_parsed_csv(normalized_metadatas)
         return normalized_metadatas
+
+    def _save_parsed_csv(self, parsed_rows: list[dict]):
+        parsed_csv_path = self.config.get("PARSED_METADATA_CSV", "dev_data/record_catalog/data/parsed_metadata.csv")
+        if not parsed_rows:
+            return
+        fieldnames = set()
+        for row in parsed_rows:
+            fieldnames.update(row.keys())
+        fieldnames = sorted(fieldnames)
+        with open(parsed_csv_path, "w", newline="", encoding="utf-8") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in parsed_rows:
+                writer.writerow(row)
+        print(f"Parsed metadata saved to {parsed_csv_path}")
+
+    def run_reconciliation_and_resolve(self):
+        parsed_csv_path = self.config.get("PARSED_METADATA_CSV", "dev_data/record_catalog/data/parsed_metadata.csv")
+        review_csv_path = self.config.get("REVIEW_SUGGESTIONS_CSV", "dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv")
+        candidates_csv_path = self.config.get("ENRICHMENT_CANDIDATES_CSV", "dev_data/record_catalog/data/outputs/enrichment_candidates.csv")
+        resolved_csv_path = self.config.get("ENRICHED_RESOLVED_CSV", "dev_data/record_catalog/data/outputs/enriched_resolved.csv")
+
+        build_review_suggestions(parsed_csv_path, review_csv_path)
+        build_enrichment_candidates(
+            parsed_csv_path,
+            review_csv_path,
+            candidates_csv_path,
+            discogs_token=self.config.get("DISCOGS_TOKEN", ""),
+            user_agent=self.config.get("MUSICBRAINZ_USER_AGENT", "RecordCatalogApp/1.0"),
+        )
+        build_resolved_enriched(
+            parsed_csv_path,
+            candidates_csv_path,
+            resolved_csv_path,
+            self.config.config_path,
+        )
 
     def run_enrichment(self, parsed_metadatas):
         """Enriches parsed metadata."""
@@ -147,13 +194,11 @@ class PipelineController:
         ocr_folder = self.config.get('OCR_IMAGE_FOLDER')
         self.run_image_preprocessing(source_folder, ocr_folder)
 
-        ocr_texts = self.run_ocr(ocr_folder)
+        ocr_rows = self.run_ocr(ocr_folder)
 
-        parsed_metadatas = self.run_parsing(ocr_texts)
+        self.run_parsing(ocr_rows)
 
-        enriched_metadatas = self.run_enrichment(parsed_metadatas)
-
-        self.run_catalog_save(enriched_metadatas)
+        self.run_reconciliation_and_resolve()
 
     def run_stepwise(self):
         """Run pipeline in steps, prompting between stages."""
@@ -168,13 +213,10 @@ class PipelineController:
         self.run_image_preprocessing(source_folder, ocr_folder)
 
         input("Press Enter to run OCR extraction...")
-        ocr_texts = self.run_ocr(ocr_folder)
+        ocr_rows = self.run_ocr(ocr_folder)
 
         input("Press Enter to run OCR text parsing...")
-        parsed_metadatas = self.run_parsing(ocr_texts)
+        self.run_parsing(ocr_rows)
 
-        input("Press Enter to run metadata enrichment...")
-        enriched_metadatas = self.run_enrichment(parsed_metadatas)
-
-        input("Press Enter to save catalog CSV...")
-        self.run_catalog_save(enriched_metadatas)
+        input("Press Enter to run reconciliation and resolved enrichment...")
+        self.run_reconciliation_and_resolve()

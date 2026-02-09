@@ -8,6 +8,7 @@ class MetadataEnricher:
         self.config = config
         self.discogs_token = config.get("DISCOGS_TOKEN")
         self.musicbrainz_user_agent = config.get("MUSICBRAINZ_USER_AGENT", "RecordCatalogApp/1.0")
+        self.use_musicbrainz = str(config.get("USE_MUSICBRAINZ", "true")).lower() != "false"
 
     def query_discogs(self, label, catalog_number, artist=None, title=None):
         if not label or not catalog_number:
@@ -49,8 +50,11 @@ class MetadataEnricher:
         return {}
 
     def query_musicbrainz(self, title, artist):
+        if not self.use_musicbrainz:
+            return {}
         if not title or not artist:
             return {}
+        time.sleep(1)
         url = "https://musicbrainz.org/ws/2/release/"
         params = {
             "query": f'release:{title} AND artist:{artist}',
@@ -76,7 +80,9 @@ class MetadataEnricher:
                     }
                 return {}
             except Exception as e:
-                print(f"MusicBrainz API error: {e}")
+                delay = 4 * (attempt + 1)
+                print(f"MusicBrainz API error: {e}. Retrying in {delay}s...")
+                time.sleep(delay)
         return {}
 
     def enrich_metadata(self, metadata: dict) -> dict:

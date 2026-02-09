@@ -70,3 +70,20 @@ Config keys (src/config.yaml):
   - dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv
 - Enrichment candidate ranking completed with Discogs lookups and fallback searches.
 - Candidate scoring now includes field agreement penalties and side-pair reconciliation.
+
+## Data Handling Scheme (Current)
+Primary data flow and outputs:
+1) Source photos -> photo catalog CSV:
+   - dev_data/record_catalog/data/outputs/photo_catalog.csv
+2) Preprocessed OCR images -> OCR inbox:
+   - dev_data/record_catalog/data/inbox_photos_ocr
+3) OCR raw outputs -> OCR CSV:
+   - dev_data/record_catalog/data/ocr_texts.csv
+4) Parsed metadata (raw + normalized fields) -> parsed CSV:
+   - dev_data/record_catalog/data/parsed_metadata.csv
+5) OCR conflict review suggestions -> review CSV:
+   - dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv
+6) Discogs candidate ranking (best-guess + evidence) -> candidate CSV:
+   - dev_data/record_catalog/data/outputs/enrichment_candidates.csv
+7) Enrichment output (resolved metadata + confidence) -> resolved CSV:
+   - dev_data/record_catalog/data/outputs/enriched_resolved.csv
