@@ -56,7 +56,7 @@ def _discogs_search(token: str, user_agent: str, label: str, catno: str, artist:
                 break
             else:
                 return {"rate_limited": True, "results": []}
-            time.sleep(0.7)
+            time.sleep(1.0)
     return {"rate_limited": False, "results": results}
 
 

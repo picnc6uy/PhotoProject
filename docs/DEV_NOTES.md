@@ -58,11 +58,13 @@ Config keys (src/config.yaml):
 - Roadmap checkboxes may be ahead of verified status; keep ROADMAP.md accurate.
 - OCR/Parser/Enrichment stages require live API keys and incur cost.
 - MusicBrainz is currently disabled (SSL EOF errors); Discogs-only enrichment is active.
+- Discogs token is now sourced from a local .env file (ignored by git). If Discogs returns 401, the run disables Discogs to finish the pipeline.
 
 ## Repo Standards (Canonical Sources)
 - Tests: `src/tests` is canonical; legacy tests live in `tests/`, `src/tests_backup/`, `src/tests/archive/` and are excluded by `pytest.ini`.
 - Config: pipeline config is `src/config.yaml`. Root `config.yaml` is a Continue/IDE config (not used by the pipeline).
 - Legacy materials are tracked under legacy/ (archived tests and sample artifacts).
+- Secrets: use a local `.env` for API tokens (ignored by git).
 
 ## Verified Today (2026-02-09)
 - Git repo initialized; core files committed; legacy materials moved to legacy/ and tracked.

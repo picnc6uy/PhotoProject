@@ -15,6 +15,7 @@ Key features:
 - Resolved enrichment outputs and final archival exports (consolidated and non-consolidated) with validation reporting.
 - Comprehensive metadata catalog management (loading, saving, searching).
 - Configured via YAML files and environment variables.
+- Local `.env` file is used for API tokens and is ignored by git.
 - Testing covers preprocessing, OCR extraction, parsing, and pipeline integration; enrichment validation is pending.
 - Designed incrementally with clear module separation, logging, error handling, and modular object-oriented pipeline components.
   - Operational details and tuning parameters live in docs/DEV_NOTES.md and src/config.yaml.
@@ -62,6 +63,7 @@ Each pipeline stage is implemented as a modular object-oriented component with c
 - Python 3.12.8 with pip 25.3 installed.
 - Project directories include .utils, dev_data, index, sessions, src, types.
 - Key config files: config.yaml, package.json, tsconfig.json.
+- Secrets should be stored in `.env` (not committed).
 
 ---
 

@@ -1,4 +1,9 @@
 import time
+
+
+def _safe_console(text: str) -> str:
+    # Avoid Windows console encoding errors by escaping non-CP1252 chars.
+    return text.encode("cp1252", "backslashreplace").decode("cp1252")
 import requests
 
 class MetadataEnricher:
@@ -9,10 +14,16 @@ class MetadataEnricher:
         self.discogs_token = config.get("DISCOGS_TOKEN")
         self.musicbrainz_user_agent = config.get("MUSICBRAINZ_USER_AGENT", "RecordCatalogApp/1.0")
         self.use_musicbrainz = str(config.get("USE_MUSICBRAINZ", "true")).lower() != "false"
+        self.discogs_disabled = False
 
     def query_discogs(self, label, catalog_number, artist=None, title=None):
+        if self.discogs_disabled:
+            return {}
         if not label or not catalog_number:
             print("Discogs enrichment skipped: missing label or catalog number.")
+            return {}
+        if not self.discogs_token:
+            print("Discogs enrichment skipped: missing DISCOGS_TOKEN.")
             return {}
         headers = {"User-Agent": self.musicbrainz_user_agent}
         params = {
@@ -29,10 +40,22 @@ class MetadataEnricher:
             params['title'] = title
 
         url = "https://api.discogs.com/database/search"
-        print(f"Querying Discogs with label='{label}', catalog_number='{catalog_number}', artist='{artist}', title='{title}'")
+        print(
+            "Querying Discogs with label='{label}', catalog_number='{catalog_number}', "
+            "artist='{artist}', title='{title}'".format(
+                label=_safe_console(str(label)),
+                catalog_number=_safe_console(str(catalog_number)),
+                artist=_safe_console(str(artist)),
+                title=_safe_console(str(title)),
+            )
+        )
         for attempt in range(3):
             try:
                 response = requests.get(url, headers=headers, params=params, timeout=10)
+                if response.status_code == 401:
+                    print("Discogs returned 401 Unauthorized. Disabling Discogs for this run.")
+                    self.discogs_disabled = True
+                    return {}
                 if response.status_code == 429:
                     retry_after = response.headers.get("Retry-After")
                     delay = int(retry_after) if retry_after and retry_after.isdigit() else 5 * (attempt + 1)
@@ -119,7 +142,10 @@ class MetadataEnricher:
         if versions:
             enriched['Discogs_Versions'] = sorted(versions)
 
-        print(f"Enriched metadata with Discogs data (provenance preserved):\n{enriched}")
+        print(
+            "Enriched metadata with Discogs data (provenance preserved):\n"
+            f"{_safe_console(str(enriched))}"
+        )
 
         # Also enrich using MusicBrainz
         mb_data = self.query_musicbrainz(metadata.get('Title'), metadata.get('Artist'))

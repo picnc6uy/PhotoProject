@@ -48,5 +48,5 @@ Verified today (2026-02-09): photo cataloging, preprocessing, OCR to CSV, parsin
 
 ## 6. Documentation and Maintenance
 - [x] Maintain up-to-date architecture and workflow documentation
-- [ ] Document environment setup and configuration
+- [x] Document environment setup and configuration (local .env for tokens)
 - [ ] Plan for incremental improvements and bug fixes

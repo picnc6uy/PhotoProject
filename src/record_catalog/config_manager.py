@@ -26,6 +26,25 @@ class ConfigManager:
         else:
             self.logger.warning("No config_path provided or not a yaml file, skipping file load.")
 
+        # Load .env overrides if present (project root)
+        env_path = os.path.join(os.getcwd(), ".env")
+        if os.path.exists(env_path):
+            try:
+                with open(env_path, "r", encoding="utf-8") as env_file:
+                    for raw_line in env_file:
+                        line = raw_line.strip()
+                        if not line or line.startswith("#") or "=" not in line:
+                            continue
+                        key, value = line.split("=", 1)
+                        key = key.strip()
+                        value = value.strip().strip('"').strip("'")
+                        if key:
+                            # Ensure this process sees the override.
+                            os.environ[key] = value
+                self.logger.debug("Loaded .env overrides.")
+            except Exception as e:
+                self.logger.error(f"Error loading .env: {e}")
+
         # Load environment variables to override
         for key, value in os.environ.items():
             self.config[key] = value

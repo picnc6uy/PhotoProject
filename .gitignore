@@ -18,6 +18,7 @@ inbox_photos_extended/
 # Local secrets / credentials
 oai_key.txt
 /config.yaml
+.env
 
 # OS / editor
 .DS_Store
