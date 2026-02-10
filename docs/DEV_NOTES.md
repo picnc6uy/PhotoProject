@@ -59,6 +59,7 @@ Config keys (src/config.yaml):
 - OCR/Parser/Enrichment stages require live API keys and incur cost.
 - MusicBrainz is currently disabled (SSL EOF errors); Discogs-only enrichment is active.
 - Discogs token is now sourced from a local .env file (ignored by git). If Discogs returns 401, the run disables Discogs to finish the pipeline.
+- Pipeline run logging writes to dev_data/record_catalog/data/outputs/logs/ with UTF-8 and safe console output.
 
 ## Repo Standards (Canonical Sources)
 - Tests: `src/tests` is canonical; legacy tests live in `tests/`, `src/tests_backup/`, `src/tests/archive/` and are excluded by `pytest.ini`.
@@ -83,6 +84,7 @@ Config keys (src/config.yaml):
 - Resolved enrichment CSV generated and final archival exports produced.
 - Consolidated output merges duplicate catalog numbers (multi-photo sides) and auto-fixes Decca K-prefixes.
 - Validation report produced (known missing catalog for photo_0047.jpg).
+- Full pipeline run completed in one pass for 204 photos (approx. 1h44m), outputs updated in outputs/ and logs/ (see latest log).
 
 ## Data Handling Scheme (Current)
 Primary data flow and outputs:

@@ -39,6 +39,7 @@ Verified today (2026-02-09): photo cataloging, preprocessing, OCR to CSV, parsin
 - [x] Develop modular pipeline components for each processing stage
 - [x] Implement end-to-end pipeline runs with logging
 - [ ] Add testing for pipeline integration
+  - Latest run (2026-02-10) completed end-to-end with log capture in outputs/logs
 
 ## 5. Testing and QA
 - [x] Unit tests for individual modules

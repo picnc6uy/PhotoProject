@@ -1,5 +1,7 @@
 import os
 import sys
+import logging
+from datetime import datetime
 import argparse  # Added import for argparse
 
 from record_catalog.config_manager import ConfigManager
@@ -15,7 +17,48 @@ from record_catalog.pipeline_controller import PipelineController
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.yaml")
 
 
+class TeeStream:
+    def __init__(self, *streams):
+        self.streams = streams
+
+    def write(self, data):
+        for stream in self.streams:
+            try:
+                stream.write(data)
+            except UnicodeEncodeError:
+                encoding = getattr(stream, "encoding", None) or "utf-8"
+                safe = data.encode(encoding, "backslashreplace").decode(encoding, "backslashreplace")
+                stream.write(safe)
+            stream.flush()
+
+    def flush(self):
+        for stream in self.streams:
+            stream.flush()
+
+
+def setup_logging():
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    log_dir = os.path.join(
+        project_root, "dev_data", "record_catalog", "data", "outputs", "logs"
+    )
+    os.makedirs(log_dir, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_path = os.path.join(log_dir, f"pipeline_run_{timestamp}.log")
+
+    log_file = open(log_path, "w", encoding="utf-8")
+    sys.stdout = TeeStream(sys.stdout, log_file)
+    sys.stderr = TeeStream(sys.stderr, log_file)
+
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s %(levelname)s %(message)s",
+        handlers=[logging.StreamHandler(sys.stdout)],
+    )
+    print(f"Logging to {log_path}")
+
+
 def main():
+    setup_logging()
     parser = argparse.ArgumentParser(description="Run the record catalog pipeline")
     parser.add_argument(
         "--stepwise", action="store_true", help="Run pipeline step-by-step with pauses"
