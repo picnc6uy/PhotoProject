@@ -15,6 +15,7 @@
 - AgentArchitect reference agent added to guide agent-development workflows (see `docs/agents/AGENT_ARCHITECT.md`).
 - Knowledge base initialized under `docs/agents/knowledge/` with best-practice summaries, distilled notes, and placeholders for external research.
 - Orchestrator implemented (`src/agent_platform/orchestrator.py`) with JSON cache support and unit coverage (`test_orchestrator.py`).
+- Drafted agent rollout sequence (`docs/agents/AGENT_ROSTER.md`) to guide implementation order.
 
 ## Archived Pipeline State (Feb 9, 2026)
 

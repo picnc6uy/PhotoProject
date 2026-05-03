@@ -13,6 +13,7 @@ _Last updated: 2026-02-10 (evening update)_
 - [x] Implement base Python package `agent_platform` with interfaces and utilities.
 - [x] Add unit tests covering abstract base class contracts and registries.
 - [x] Deliver single-agent orchestrator with caching (`orchestrator.py`, `test_orchestrator.py`).
+- [x] Publish architecture and agent roster docs (`AGENT_PLATFORM_ARCHITECTURE.md`, `AGENT_ROSTER.md`).
 - [ ] Document architecture (sequence diagrams, component responsibilities).
 
 ## Phase 2 — Tooling & Integration

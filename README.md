@@ -51,6 +51,8 @@ Build agents that can plan, implement, and evaluate software tasks in collaborat
 - Review `docs/agents/AGENT_ARCHITECT.md` for the expert agent blueprint now available.
 - Browse `docs/agents/knowledge/` for curated references and research notes.
 - Review `docs/agents/ORCHESTRATOR_PLAN.md` for the orchestration roadmap.
+- Check `docs/agents/AGENT_PLATFORM_ARCHITECTURE.md` for the PlantUML architecture overview.
+- Browse `docs/agents/AGENT_ROSTER.md` for the ordered agent rollout.
 - Core Python package scaffolding lives under `src/agent_platform/` (including `orchestrator.py`).
 
 ---
