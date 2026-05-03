@@ -1,16 +1,18 @@
-# Software Developer Agent Platform — Roadmap
+# Softo tware Developer Agent Platform — Roadmap
 
 _Last updated: 2026-02-10 (evening update)_
 
 ## Phase 0 — Foundations
 - [x] Draft project charter and glossary (`PROJECT_CHARTER.md`).
 - [x] Update top-level documentation to reflect pivot from record catalog pipeline.
+- [x] Seed agent knowledge base (`docs/agents/knowledge/`).
 - [ ] Define repository layout and coding standards for agent platform modules.
 
 ## Phase 1 — Architecture & Scaffolding
 - [ ] Finalize core abstractions (Agent, Task, Tool, Environment, Memory).
 - [x] Implement base Python package `agent_platform` with interfaces and utilities.
 - [x] Add unit tests covering abstract base class contracts and registries.
+- [x] Deliver single-agent orchestrator with caching (`orchestrator.py`, `test_orchestrator.py`).
 - [ ] Document architecture (sequence diagrams, component responsibilities).
 
 ## Phase 2 — Tooling & Integration

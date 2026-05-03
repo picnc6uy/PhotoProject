@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List
+from pathlib import Path
 
 from .base import Agent
 from ..tasks import TaskSpec
@@ -74,11 +75,13 @@ class AgentArchitect(Agent):
             f"{tool.name}: {tool.description}"
             for tool in self.tools.list_tools()
         ]
+        knowledge_topics = metadata.get("knowledge_topics") or self._default_knowledge_topics()
         return {
             "workspace_docs": metadata.get("workspace_docs", []),
             "available_tools": metadata.get("available_tools", registered_tools),
             "test_commands": metadata.get("test_commands", []),
             "branch": metadata.get("branch", "feature/version2"),
+            "knowledge_topics": knowledge_topics,
         }
 
     def _generate_recommendations(
@@ -92,9 +95,12 @@ class AgentArchitect(Agent):
         if "Review workspace" in step:
             docs = environment.get("workspace_docs", [])
             if docs:
-                recommendations.append("Prioritise reading:" + ", ".join(docs))
+                recommendations.append("Prioritise reading: " + ", ".join(docs))
             else:
                 recommendations.append("Capture workspace documentation inventory.")
+            knowledge = environment.get("knowledge_topics", [])
+            if knowledge:
+                recommendations.append("Consult knowledge base: " + ", ".join(knowledge))
 
         if "Map available tools" in step:
             tools = environment.get("available_tools", [])
@@ -135,3 +141,11 @@ class AgentArchitect(Agent):
             recommendations.append(f"Ensure focus area '{task_hint}' is addressed explicitly.")
 
         return recommendations
+
+    def _default_knowledge_topics(self) -> List[str]:
+        knowledge_dir = Path("docs/agents/knowledge")
+        topics: List[str] = []
+        if knowledge_dir.exists():
+            for path in sorted(knowledge_dir.glob("*.md")):
+                topics.append(path.name)
+        return topics

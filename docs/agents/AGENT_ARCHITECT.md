@@ -23,6 +23,10 @@ The agent consumes a `TaskSpec` whose `metadata` may include:
 - `test_commands`: Commands covering the regression suite.
 - `branch`: Active branch name (defaults to `feature/version2`).
 - `focus_area`: Specific aspect of agent development to emphasise.
+- `knowledge_topics`: Optional list of knowledge-base files under `docs/agents/knowledge/` to preload.
+
+## Knowledge Base Integration
+AgentArchitect should read the summaries stored in `docs/agents/knowledge/` (e.g., OpenAI assistant capabilities, orchestration best practices, safety guidance) before generating plans.
 
 ## Extending
 - Register additional tools in the `ToolRegistry` to enrich environment snapshots.

@@ -131,4 +131,7 @@ def test_agent_architect_produces_workspace_specific_plan():
     assert state.artifacts["architecture_notes"]  # notes recorded for each step
     first_action = state.actions[0]
     assert "workspace_docs" in first_action["environment"]
-    assert any("focus area" in note for note in state.artifacts["architecture_notes"][0]["recommendations"])
+    assert first_action["environment"]["knowledge_topics"]  # defaults populated
+    first_notes = state.artifacts["architecture_notes"][0]["recommendations"]
+    assert any("Consult knowledge base" in note for note in first_notes)
+    assert any("focus area" in note for note in first_notes)

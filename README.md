@@ -49,14 +49,16 @@ Build agents that can plan, implement, and evaluate software tasks in collaborat
 - See `docs/agents/PROJECT_CHARTER.md` for goals, success criteria, and glossary.
 - See `docs/agents/ROADMAP.md` for milestone planning.
 - Review `docs/agents/AGENT_ARCHITECT.md` for the expert agent blueprint now available.
-- Core Python package scaffolding lives under `src/agent_platform/`.
+- Browse `docs/agents/knowledge/` for curated references and research notes.
+- Review `docs/agents/ORCHESTRATOR_PLAN.md` for the orchestration roadmap.
+- Core Python package scaffolding lives under `src/agent_platform/` (including `orchestrator.py`).
 
 ---
 
 ## Docs
 - `MASTER_PROJECT_CONTEXT.md` – cross-project overview and current focus.
 - `ROADMAP.md` – legacy pipeline checklist plus links into the agent roadmap.
-- `docs/DEV_NOTES.md` – operational log with context on the project pivot and agent development.
+- `docs/DEV_NOTES.md` – operational log covering the project pivot, agent development, and orchestration updates.
 
 ## Repo notes
 - Canonical tests live in `src/tests` (legacy tests remain under `tests/` and `src/tests_backup/`).

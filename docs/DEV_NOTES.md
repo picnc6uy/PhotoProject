@@ -13,6 +13,8 @@
 - Focus is shifting to a new project centered on building agents capable of acting as software developers; new documentation will capture planning for that effort.
 - Agent platform bootstrapped with base abstractions (`Agent`, `TaskSpec`, `ToolRegistry`) and corresponding unit tests.
 - AgentArchitect reference agent added to guide agent-development workflows (see `docs/agents/AGENT_ARCHITECT.md`).
+- Knowledge base initialized under `docs/agents/knowledge/` with best-practice summaries, distilled notes, and placeholders for external research.
+- Orchestrator implemented (`src/agent_platform/orchestrator.py`) with JSON cache support and unit coverage (`test_orchestrator.py`).
 
 ## Archived Pipeline State (Feb 9, 2026)
 
