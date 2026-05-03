@@ -2,10 +2,13 @@
 
 from .tasks import TaskSpec
 from .tools import Tool, ToolRegistry
-from .agents.base import Agent
+from .agents import Agent, AgentArchitect, AgentConfig, AgentState
 
 __all__ = [
     "Agent",
+    "AgentArchitect",
+    "AgentConfig",
+    "AgentState",
     "TaskSpec",
     "Tool",
     "ToolRegistry",

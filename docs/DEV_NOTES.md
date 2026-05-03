@@ -11,6 +11,8 @@
 - Record cataloging pipeline v1 is feature-complete and moving into maintenance/archival mode.
 - The exploratory `feature/version2` branch has been created and shelved until the cataloging domain is revisited.
 - Focus is shifting to a new project centered on building agents capable of acting as software developers; new documentation will capture planning for that effort.
+- Agent platform bootstrapped with base abstractions (`Agent`, `TaskSpec`, `ToolRegistry`) and corresponding unit tests.
+- AgentArchitect reference agent added to guide agent-development workflows (see `docs/agents/AGENT_ARCHITECT.md`).
 
 ## Archived Pipeline State (Feb 9, 2026)
 
@@ -118,6 +120,7 @@ Primary data flow and outputs:
    - dev_data/record_catalog/data/outputs/catalog_validation_report.csv
 
 ## Next Steps: Software Developer Agent Initiative
-- Create dedicated planning documents (charter, glossary, architecture outline) for the agent developer project.
+- Formalise architecture documentation (diagrams, ADRs) for the new platform.
 - Identify tooling, benchmarks, and evaluation harnesses to measure agent effectiveness on real coding tasks.
 - Outline initial milestones and experimentation plan before bootstrapping the new repository/workspace.
+- Prototype tooling adapters (shell, git, editor) and connect them to the ToolRegistry.

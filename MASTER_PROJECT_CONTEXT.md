@@ -1,12 +1,13 @@
 ---
 Last updated: 2026-02-10
 
-## Current Statu
-s
+## Current Status
 
 - The Continue record-catalog pipeline (v1) is feature-complete and now in maintenance mode.
 - Future enhancements captured on branch `feature/version2` are paused until work resumes.
 - Active development is pivoting to a new initiative focused on building software developer agents.
+- AgentArchitect reference agent established to advise on agent-building workflows within this repository.
+
 
 ## Project Summary (Archived Continue Pipeline)
 
@@ -92,7 +93,8 @@ The next active project will focus on designing and implementing autonomous agen
 
 - Defining requirements and success metrics for agent-assisted software delivery.
 - Establishing architecture, tooling, and evaluation harnesses tailored to agent workflows.
-- Capturing planning artifacts, roadmaps, and technical notes in new agent-specific documentation (to be created).
+- Capturing planning artifacts, roadmaps, and technical notes in new agent-specific documentation (see `docs/agents/PROJECT_CHARTER.md`, `docs/agents/ROADMAP.md`, and `docs/agents/AGENT_ARCHITECT.md`).
+
 
 ## Additional Resources
 

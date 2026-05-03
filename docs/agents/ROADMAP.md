@@ -1,6 +1,6 @@
 # Software Developer Agent Platform — Roadmap
 
-_Last updated: 2026-02-10_
+_Last updated: 2026-02-10 (evening update)_
 
 ## Phase 0 — Foundations
 - [x] Draft project charter and glossary (`PROJECT_CHARTER.md`).
@@ -9,8 +9,8 @@ _Last updated: 2026-02-10_
 
 ## Phase 1 — Architecture & Scaffolding
 - [ ] Finalize core abstractions (Agent, Task, Tool, Environment, Memory).
-- [ ] Implement base Python package `agent_platform` with interfaces and utilities.
-- [ ] Add unit tests covering abstract base class contracts and registries.
+- [x] Implement base Python package `agent_platform` with interfaces and utilities.
+- [x] Add unit tests covering abstract base class contracts and registries.
 - [ ] Document architecture (sequence diagrams, component responsibilities).
 
 ## Phase 2 — Tooling & Integration
@@ -29,6 +29,7 @@ _Last updated: 2026-02-10_
 - [ ] Design reference reasoning loop(s) (plan-act-reflect, tree-of-thought, etc.).
 - [ ] Implement planning strategy with milestone checkpoints for human oversight.
 - [ ] Demonstrate agent completing a small coding task end-to-end (scaffold → code → test → summarize).
+- [x] Deliver AgentArchitect blueprint as workspace expert (`docs/agents/AGENT_ARCHITECT.md`).
 - [ ] Conduct post-mortem and iterate on safety/quality controls.
 
 ## Phase 5 — Expansion & Collaboration

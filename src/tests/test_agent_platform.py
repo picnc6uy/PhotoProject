@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import Dict
 
-from agent_platform.agents.base import Agent, AgentConfig
+from agent_platform.agents import AgentArchitect, AgentConfig
+from agent_platform.agents.base import Agent
 from agent_platform.tasks import AcceptanceCriteria, TaskSpec
 from agent_platform.tools import Tool, ToolContext, ToolRegistry
 
@@ -96,3 +97,38 @@ def test_dummy_agent_runs_plan(monkeypatch):
     assert len(state.actions) == 3
     assert state.iteration >= len(state.actions)
     assert all("ECHO:" in action["output"] for action in state.actions)
+
+
+def test_agent_architect_produces_workspace_specific_plan():
+    registry = ToolRegistry()
+    registry.register(EchoTool())
+    config = AgentConfig(name="architect", max_iterations=10)
+    agent = AgentArchitect(config, registry)
+
+    task = TaskSpec(
+        title="Bootstrap expert agent guidance",
+        summary="Create advisory plan for building agents tailored to this workspace.",
+        requirements=[
+            "Leverage existing documentation",
+            "Consider available tools and tests",
+            "Outline validation strategy",
+        ],
+        metadata={
+            "workspace_docs": [
+                "MASTER_PROJECT_CONTEXT.md",
+                "docs/agents/PROJECT_CHARTER.md",
+            ],
+            "available_tools": ["shell: execute controlled shell commands"],
+            "test_commands": ["pytest -q"],
+            "focus_area": "agent bootstrap",
+        },
+    )
+
+    state = agent.run(task)
+
+    assert state.outcome.startswith("Architected plan for 'Bootstrap expert agent guidance'")
+    assert len(state.actions) == len(state.plan)
+    assert state.artifacts["architecture_notes"]  # notes recorded for each step
+    first_action = state.actions[0]
+    assert "workspace_docs" in first_action["environment"]
+    assert any("focus area" in note for note in state.artifacts["architecture_notes"][0]["recommendations"])
