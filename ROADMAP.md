@@ -1,3 +1,8 @@
+# Status Update (2026-02-10)
+- The Continue record cataloging pipeline roadmap below is archived for maintenance reference.
+- Work on branch `feature/version2` is paused until a future revisit of the pipeline domain.
+- Active planning is shifting to a new software developer agent initiative (see Section 7).
+
 ## 1. Image Preprocessing and OCR Preparation (Last updated: 2026-02-09)
 Note: Verify checklist status against docs/DEV_NOTES.md (source of current run results).
 Verified today (2026-02-09): photo cataloging, preprocessing, OCR to CSV, parsing, reconciliation, resolved output, final archival exports (see docs/DEV_NOTES.md).
@@ -34,6 +39,7 @@ Verified today (2026-02-09): photo cataloging, preprocessing, OCR to CSV, parsin
 - [ ] Query MusicBrainz API for metadata enrichment (blocked: SSL EOF errors)
 - [x] Develop consistency checks and validation logic (validation report + Decca auto-fix)
 - [ ] Implement metadata catalog storage and search functionality
+  - [x] Produce final_total_catalog.csv with A/B side consolidation
 
 ## 4. Pipeline Integration and Automation
 - [x] Develop modular pipeline components for each processing stage
@@ -51,3 +57,8 @@ Verified today (2026-02-09): photo cataloging, preprocessing, OCR to CSV, parsin
 - [x] Maintain up-to-date architecture and workflow documentation
 - [x] Document environment setup and configuration (local .env for tokens)
 - [ ] Plan for incremental improvements and bug fixes
+
+## 7. Next Initiative – Software Developer Agent Platform
+- [ ] Draft a project charter outlining agent capabilities, evaluation metrics, and success criteria.
+- [ ] Establish a dedicated repository or workspace layout for agent tooling and experiments.
+- [ ] Define milestone roadmap, documentation structure, and initial research spikes for agent-assisted development.

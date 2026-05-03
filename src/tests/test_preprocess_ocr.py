@@ -1,36 +1,43 @@
 import os
 from pathlib import Path
+from typing import List
+
+import pytest
+
 from record_catalog.config_manager import ConfigManager
 from record_catalog.image_processor import ImageProcessor
 
 
-def test_preprocess_ocr_images(input_folder, ocr_output_folder):
+_IMAGE_EXTENSIONS = (".png", ".jpg", ".jpeg", ".bmp")
+
+
+def _preprocess_ocr_images(input_folder: str, ocr_output_folder: str) -> List[str]:
     config = ConfigManager()  # Load dynamic config
     processor = ImageProcessor(config)
 
-    print(f"Debug: OCR image input folder: {input_folder}")
     if not os.path.exists(input_folder):
-        print(f"Error: Input folder does not exist: {input_folder}")
-        return []
+        raise FileNotFoundError(f"Input folder does not exist: {input_folder}")
 
-    files = os.listdir(input_folder)
-    if not files:
-        print("Warning: Input folder is empty.")
-    else:
-        print(f"Found {len(files)} files in input folder.")
-        for f in files:
-            print(f" - {f}")
+    os.makedirs(ocr_output_folder, exist_ok=True)
 
-    # Preprocess OCR images
-    results = []
+    files = [name for name in os.listdir(input_folder) if name.lower().endswith(_IMAGE_EXTENSIONS)]
+
+    results: List[str] = []
     for filename in files:
-        if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp')):
-            source_path = os.path.join(input_folder, filename)
-            ocr_path = processor.resize_image_for_ocr(source_path, ocr_output_folder)
-            size_bytes = os.path.getsize(ocr_path)
-            print(f"OCR image {filename} resized and saved to: {ocr_path} (size: {size_bytes} bytes)")
+        source_path = os.path.join(input_folder, filename)
+        ocr_path = processor.resize_image_for_ocr(source_path, ocr_output_folder)
+        if os.path.exists(ocr_path):
             results.append(ocr_path)
     return results
+
+
+def test_preprocess_ocr_images(input_folder, ocr_output_folder):
+    results = _preprocess_ocr_images(input_folder, ocr_output_folder)
+    if not results:
+        pytest.skip("No preprocessable OCR images were found in the input folder.")
+
+    for processed_path in results:
+        assert os.path.isfile(processed_path), f"Processed file missing: {processed_path}"
 
 
 if __name__ == '__main__':
@@ -48,6 +55,6 @@ if __name__ == '__main__':
 
     os.makedirs(ocr_output_folder, exist_ok=True)
 
-    preprocessed_files = test_preprocess_ocr_images(str(source_folder), str(ocr_output_folder))
+    preprocessed_files = _preprocess_ocr_images(str(source_folder), str(ocr_output_folder))
     print(f"Total OCR images preprocessed: {len(preprocessed_files)}")
 

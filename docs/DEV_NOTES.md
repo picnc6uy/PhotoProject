@@ -7,7 +7,13 @@
 #
 # This file is for current state, recent changes, and operational notes.
 
-## Current State (Feb 9, 2026)
+## Status Update (Feb 10, 2026)
+- Record cataloging pipeline v1 is feature-complete and moving into maintenance/archival mode.
+- The exploratory `feature/version2` branch has been created and shelved until the cataloging domain is revisited.
+- Focus is shifting to a new project centered on building agents capable of acting as software developers; new documentation will capture planning for that effort.
+
+## Archived Pipeline State (Feb 9, 2026)
+
 - Photo cataloging test passes and writes CSV to:
   - dev_data/record_catalog/data/outputs/photo_catalog.csv
 - Preprocessing uses smooth mode by default (see src/config.yaml).
@@ -25,6 +31,8 @@
 - Final archival exports generated:
   - dev_data/record_catalog/data/outputs/final_archival_catalog.csv
   - dev_data/record_catalog/data/outputs/final_archival_catalog_consolidated.csv
+- Final total export (A/B sides merged) generated:
+  - dev_data/record_catalog/data/outputs/final_total_catalog.csv
 - Validation report generated:
   - dev_data/record_catalog/data/outputs/catalog_validation_report.csv
 
@@ -108,3 +116,8 @@ Primary data flow and outputs:
    - dev_data/record_catalog/data/outputs/final_archival_catalog_consolidated.csv
 10) Validation report -> report CSV:
    - dev_data/record_catalog/data/outputs/catalog_validation_report.csv
+
+## Next Steps: Software Developer Agent Initiative
+- Create dedicated planning documents (charter, glossary, architecture outline) for the agent developer project.
+- Identify tooling, benchmarks, and evaluation harnesses to measure agent effectiveness on real coding tasks.
+- Outline initial milestones and experimentation plan before bootstrapping the new repository/workspace.

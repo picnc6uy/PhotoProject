@@ -1,59 +1,84 @@
-import sys
-import os
 import logging
+import sys
 from pathlib import Path
+from typing import Optional
 
-# Add workspace src path for imports
-WORKSPACE_ROOT = Path(r"C:/Users/ghendrick/PhotoProject")
-SRC_PATH = WORKSPACE_ROOT / "src"
-sys.path.insert(0, str(SRC_PATH))
+import pytest
 
 from record_catalog.config_manager import ConfigManager
 from record_catalog.ocr_service import OCRService
 
-def test_azure_ocr_connection():
+_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp"}
+
+
+def _select_test_image(ocr_folder: Path) -> Optional[Path]:
+    for candidate in sorted(ocr_folder.iterdir()):
+        if candidate.suffix.lower() in _IMAGE_EXTENSIONS and candidate.is_file():
+            return candidate
+    return None
+
+
+def _run_azure_ocr_connection(config_path: Path, image_path: Path) -> str:
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s %(levelname)s %(message)s",
         handlers=[logging.StreamHandler(sys.stdout)],
-        force=True
+        force=True,
     )
     logger = logging.getLogger("AzureConnectionTest")
+    logger.info("Testing Azure OCR service connection using image: %s", image_path)
 
-    config_path = WORKSPACE_ROOT / "src" / "config.yaml"
     config = ConfigManager(config_path=str(config_path))
+    ocr_service = OCRService(config)
 
-    ocr_images_folder = config.get("OCR_IMAGE_FOLDER")
-    if not ocr_images_folder:
-        logger.error("OCR_IMAGE_FOLDER not set in config")
-        return ""
+    ocr_result = ocr_service.process_image(str(image_path))
+    if not isinstance(ocr_result, dict):
+        raise ValueError("OCR service did not return a dict response.")
 
-    test_image = "photo_0003.jpg"
-    test_image_path = os.path.join(ocr_images_folder, test_image)
+    text = ocr_service.get_text_with_confidence_filter(ocr_result, threshold=0.8)
+    if not isinstance(text, str):
+        raise ValueError("Filtered OCR text was not a string.")
 
-    if not os.path.isfile(test_image_path):
-        logger.error(f"Test image does not exist: {test_image_path}")
-        return ""
+    return text or ocr_result.get("text", "")
 
-    logger.info(f"Testing Azure OCR service connection using image: {test_image_path}")
+
+@pytest.mark.integration
+def test_azure_ocr_connection(workspace_root, ocr_folder):
+    config_path = Path(workspace_root) / "src" / "config.yaml"
+    test_image = _select_test_image(Path(ocr_folder))
+    if test_image is None:
+        pytest.skip("No OCR images available for Azure OCR connection test.")
 
     try:
-        ocr_service = OCRService(config)
-        ocr_result = ocr_service.process_image(test_image_path)
-        text = ocr_service.get_text_with_confidence_filter(ocr_result, threshold=0.8)
-        logger.info("OCR Text extraction completed successfully.")
-        print("\nFull OCR Text Output:\n")
-        print(text)
-        sys.stdout.flush()
-        return text
-    except Exception as e:
-        logger.error(f"Exception during Azure OCR service test: {e}")
-        return ""
+        text = _run_azure_ocr_connection(config_path, test_image)
+    except Exception as exc:  # pragma: no cover - integration failure information
+        pytest.fail(f"Azure OCR connection failed: {exc!r}")
+
+    assert isinstance(text, str)
+
 
 if __name__ == "__main__":
-    extracted_text = test_azure_ocr_connection()
+    workspace_root = Path(__file__).resolve().parents[2]
+    ocr_folder = workspace_root / "dev_data" / "record_catalog" / "data" / "inbox_photos_ocr"
+    config_path = workspace_root / "src" / "config.yaml"
+
+    if not ocr_folder.exists():
+        print(f"OCR folder does not exist: {ocr_folder}")
+        sys.exit(0)
+
+    image = _select_test_image(ocr_folder)
+    if image is None:
+        print("No OCR images available for manual Azure OCR test.")
+        sys.exit(0)
+
+    try:
+        extracted_text = _run_azure_ocr_connection(config_path, image)
+    except Exception as exc:
+        print(f"Azure OCR connection failed: {exc}")
+        sys.exit(1)
+
     if extracted_text:
         print("\n=== OCR Extraction Result ===")
         print(extracted_text)
     else:
-        print("\nOCR Extraction failed or no text extracted.")
+        print("\nOCR Extraction completed, but no text was extracted.")

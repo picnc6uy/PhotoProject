@@ -1,7 +1,15 @@
 ---
-Last updated: 2026-02-09
+Last updated: 2026-02-10
 
-## Project Summary
+## Current Statu
+s
+
+- The Continue record-catalog pipeline (v1) is feature-complete and now in maintenance mode.
+- Future enhancements captured on branch `feature/version2` are paused until work resumes.
+- Active development is pivoting to a new initiative focused on building software developer agents.
+
+## Project Summary (Archived Continue Pipeline)
+
 
 The Continue project is an AI-powered photo cataloging and record metadata management system combining Python and TypeScript components in an object-oriented architecture.
 
@@ -78,12 +86,21 @@ Each pipeline stage is implemented as a modular object-oriented component with c
 
 ---
 
+## New Initiative: Software Developer Agent Platform
+
+The next active project will focus on designing and implementing autonomous agents that can operate as end-to-end software developers. Initial objectives include:
+
+- Defining requirements and success metrics for agent-assisted software delivery.
+- Establishing architecture, tooling, and evaluation harnesses tailored to agent workflows.
+- Capturing planning artifacts, roadmaps, and technical notes in new agent-specific documentation (to be created).
+
 ## Additional Resources
 
-- See [ROADMAP.md](ROADMAP.md) for detailed development checklist and project milestones.
-- See [docs/DEV_NOTES.md](docs/DEV_NOTES.md) for recent development session summaries, known issues, and next steps.
+- See [ROADMAP.md](ROADMAP.md) for the legacy pipeline checklist and maintenance notes, plus forthcoming agent-planning updates.
+- See [docs/DEV_NOTES.md](docs/DEV_NOTES.md) for historical run summaries and the latest status on the project transition.
 
 ---
 
-Thank you for contributing to Continue. Your careful work ensures robustness and adaptability.
+Thank you for contributing to Continue and the upcoming agent development initiative. Your careful work ensures robustness and adaptability.
+
 

@@ -13,7 +13,7 @@ from record_catalog.config_manager import ConfigManager
 from record_catalog.parser import OCRParser
 from record_catalog.normalizer import MetadataNormalizer
 
-class TestOCRParsingStage:
+class OCRParsingStageRunner:
     def __init__(self):
         # Load config from workspace root
         config_path = WORKSPACE_ROOT / 'src' / 'config.yaml'
@@ -76,5 +76,5 @@ class TestOCRParsingStage:
             self.logger.warning('No parsed metadata generated.')
 
 if __name__ == '__main__':
-    test = TestOCRParsingStage()
-    test.run()
+    runner = OCRParsingStageRunner()
+    runner.run()

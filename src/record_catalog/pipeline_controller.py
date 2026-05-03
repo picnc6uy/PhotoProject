@@ -13,7 +13,7 @@ from .normalizer import MetadataNormalizer
 from .reconcile import build_review_suggestions
 from .candidate_ranker import build_enrichment_candidates
 from .resolved_builder import build_resolved_enriched
-from .final_exporter import build_final_archival_catalog, write_catalog_validation_report
+from .final_exporter import build_final_archival_catalog, build_final_total_catalog, write_catalog_validation_report
 
 class PipelineController:
     """Orchestrates the entire cataloging pipeline sequence.
@@ -143,6 +143,7 @@ class PipelineController:
         resolved_csv_path = self.config.get("ENRICHED_RESOLVED_CSV", "dev_data/record_catalog/data/outputs/enriched_resolved.csv")
         final_csv_path = self.config.get("FINAL_ARCHIVAL_CSV", "dev_data/record_catalog/data/outputs/final_archival_catalog.csv")
         consolidated_csv_path = self.config.get("FINAL_ARCHIVAL_CONSOLIDATED_CSV", "dev_data/record_catalog/data/outputs/final_archival_catalog_consolidated.csv")
+        total_csv_path = self.config.get("FINAL_TOTAL_CATALOG_CSV", "dev_data/record_catalog/data/outputs/final_total_catalog.csv")
         validation_csv_path = self.config.get("CATALOG_VALIDATION_REPORT_CSV", "dev_data/record_catalog/data/outputs/catalog_validation_report.csv")
 
         build_review_suggestions(parsed_csv_path, review_csv_path)
@@ -161,6 +162,7 @@ class PipelineController:
         )
         build_final_archival_catalog(resolved_csv_path, final_csv_path, consolidate=False)
         build_final_archival_catalog(resolved_csv_path, consolidated_csv_path, consolidate=True)
+        build_final_total_catalog(resolved_csv_path, total_csv_path)
         write_catalog_validation_report(consolidated_csv_path, validation_csv_path)
 
     def run_enrichment(self, parsed_metadatas):
