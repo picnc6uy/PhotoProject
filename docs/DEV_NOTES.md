@@ -19,6 +19,7 @@
 - Implemented first-stage agents (ResourceSurveyor, TaskRefiner, RiskMonitor) with unit tests and integrated exports.
 - Added mid-stage agents (PlannerAgent, DesignAdvisor, ImplementerAgent) with dedicated workflow tests.
 - Implemented execution-stage agents (TestRunnerAgent, CodeReviewer, RequirementsVerifier) and validated workflows.
+- Completed release pipeline agents (IntegratorAgent, ReleaseCoordinator, PostMergeObserver) with scenario tests.
 
 ## Archived Pipeline State (Feb 9, 2026)
 

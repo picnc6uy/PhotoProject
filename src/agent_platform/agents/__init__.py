@@ -11,6 +11,9 @@ from .implementer_agent import ImplementerAgent
 from .test_runner_agent import TestRunnerAgent
 from .code_reviewer import CodeReviewer
 from .requirements_verifier import RequirementsVerifier
+from .integrator_agent import IntegratorAgent
+from .release_coordinator import ReleaseCoordinator
+from .post_merge_observer import PostMergeObserver
 
 __all__ = [
     "Agent",
@@ -26,4 +29,7 @@ __all__ = [
     "TestRunnerAgent",
     "CodeReviewer",
     "RequirementsVerifier",
+    "IntegratorAgent",
+    "ReleaseCoordinator",
+    "PostMergeObserver",
 ]

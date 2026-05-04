@@ -28,5 +28,6 @@ This document enumerates the planned agents from simplest to most complex, captu
 1. Implement ResourceSurveyor, TaskRefiner, and RiskMonitor (✔️).
 2. Implement PlannerAgent, DesignAdvisor, and ImplementerAgent with iterative tests (✔️).
 3. Implement TestRunnerAgent, CodeReviewer, and RequirementsVerifier with workflow validation (✔️).
-4. Define contracts and schemas for IntegratorAgent, ReleaseCoordinator, PostMergeObserver (plus supporting tooling).
+4. Implement IntegratorAgent, ReleaseCoordinator, and PostMergeObserver with stage-four tests (✔️).
 5. Extend the Orchestrator to support DAG execution (ResourceSurveyor → TaskRefiner → RiskMonitor → PlannerAgent → …).
+6. Define contracts/ADR entries for cross-agent orchestration and tooling policies.
