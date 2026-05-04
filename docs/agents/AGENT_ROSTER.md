@@ -8,20 +8,24 @@ This document enumerates the planned agents from simplest to most complex, captu
 |-------|-------|---------|------------|-------------|--------------|
 | 1 | **ResourceSurveyor** | Compile workspace context and highlight relevant docs/tools for a task. | `TaskSpec` with minimal metadata. | Summary list of docs/tools/tests to load. | ToolRegistry (read-only), knowledge base. |
 | 2 | **TaskRefiner** | Clarify and expand requirements, producing structured acceptance criteria. | TaskSpec + ResourceSurveyor summary. | Updated TaskSpec with refined requirements & acceptance. | ResourceSurveyor. |
-| 3 | **PlannerAgent** | Break work into milestones and assign agent responsibilities. | Refined TaskSpec. | Structured plan (milestones, agent assignments). | TaskRefiner, ToolRegistry. |
-| 4 | **DesignAdvisor** | Produce architecture sketches and component outlines for changes. | Planner output. | Design synopsis + ADR suggestions. | PlannerAgent. |
-| 5 | **ImplementerAgent** | Generate code changes for a single work item. | Planner milestone + design notes. | Proposed diffs / patch instructions. | ToolRegistry (editor, git). |
-| 6 | **TestRunnerAgent** | Run designated tests, lint, and static analysis. | Implementer output + configured test commands. | Test results, logs, failure summaries. | ToolRegistry (shell, pytest). |
-| 7 | **ReviewerAgent** | Critique proposed changes, ensure requirements met, flag issues. | Implementer output, test results. | Approval status, review comments, risk flags. | ImplementerAgent, TestRunnerAgent. |
-| 8 | **IntegratorAgent** | Stage accepted changes, prepare commits, update docs. | Approved diffs + review notes. | Commit message, documentation updates, merge instructions. | ReviewerAgent, ToolRegistry (git, docs). |
-| 9 | **ReleaseCoordinator** | Orchestrate deployment tasks, publish artifacts, notify stakeholders. | Integrator output + release config. | Release checklist, deployment logs, notifications. | IntegratorAgent, external services. |
+| 3 | **RiskMonitor** | Surface dependencies, risk level, and mitigation guidance. | Refined TaskSpec (+ metadata). | Risk report (level, dependencies, mitigations). | TaskRefiner. |
+| 4 | **PlannerAgent** | Break work into milestones and assign agent responsibilities. | Refined TaskSpec + risk report. | Structured plan (milestones, agent assignments). | TaskRefiner, RiskMonitor, ToolRegistry. |
+| 5 | **DesignAdvisor** | Produce architecture sketches and component outlines for changes. | Planner output. | Design synopsis + ADR suggestions. | PlannerAgent. |
+| 6 | **ImplementerAgent** | Generate code changes for a single work item. | Planner milestone + design notes. | Proposed diffs / patch instructions. | ToolRegistry (editor, git). |
+| 7 | **TestRunnerAgent** | Run designated tests, lint, and static analysis. | Implementer output + configured test commands. | Test results, logs, failure summaries. | ToolRegistry (shell, pytest). |
+| 8 | **CodeReviewer** | Evaluate code quality, style, and logical soundness. | Implementer output, test results. | Review comments, change requests. | ImplementerAgent, TestRunnerAgent. |
+| 9 | **RequirementsVerifier** | Ensure acceptance criteria are satisfied and gaps flagged. | Implementer output, refined acceptance criteria. | Verification checklist, unmet criteria. | TaskRefiner, CodeReviewer. |
+| 10 | **IntegratorAgent** | Stage accepted changes, prepare commits, update docs. | Approved diffs + review notes. | Commit message, documentation updates, merge instructions. | CodeReviewer, RequirementsVerifier, ToolRegistry (git, docs). |
+| 11 | **ReleaseCoordinator** | Orchestrate deployment tasks, publish artifacts, notify stakeholders. | Integrator output + release config. | Release checklist, deployment logs, notifications. | IntegratorAgent, external services. |
+| 12 | **PostMergeObserver** | Monitor post-release signals and trigger rollback if needed. | Release artifacts, monitoring feeds. | Observation report, rollback recommendation. | ReleaseCoordinator, external telemetry. |
 
 ## Design Notes
-- Early agents (ResourceSurveyor → Planner) are low-risk and read-only; focus on high accuracy and structured summaries.
-- Implementer/TestRunner/Reviewer form the execution core; they require stricter safety checks and human approval gates.
-- Integrator and ReleaseCoordinator should only run once the team is confident in upstream agent reliability and auditing.
+- Early agents (ResourceSurveyor → RiskMonitor) are read-only and establish context before changes are proposed.
+- Implementer/TestRunner/CodeReviewer/RequirementsVerifier form the execution core and must operate under strict safety controls.
+- Integrator, ReleaseCoordinator, and PostMergeObserver depend on solid auditing and human checkpoints before automated promotion/rollback logic is trusted.
 
 ## Next Actions
-1. Implement ResourceSurveyor and TaskRefiner leveraging the knowledge base summaries.
-2. Extend Orchestrator to chain agent executions according to the plan graph (ResourceSurveyor → TaskRefiner → Planner).
-3. Document each agent’s contract (purpose, inputs, outputs, schema) before implementation.
+1. Implement ResourceSurveyor, TaskRefiner, and RiskMonitor (✔️).
+2. Implement PlannerAgent, DesignAdvisor, and ImplementerAgent with iterative tests (✔️).
+3. Define contracts and schemas for remaining agents (TestRunner, CodeReviewer, RequirementsVerifier, Integrator, ReleaseCoordinator, PostMergeObserver).
+4. Extend the Orchestrator to support DAG execution (ResourceSurveyor → TaskRefiner → RiskMonitor → PlannerAgent → …).

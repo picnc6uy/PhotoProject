@@ -16,6 +16,8 @@
 - Knowledge base initialized under `docs/agents/knowledge/` with best-practice summaries, distilled notes, and placeholders for external research.
 - Orchestrator implemented (`src/agent_platform/orchestrator.py`) with JSON cache support and unit coverage (`test_orchestrator.py`).
 - Drafted agent rollout sequence (`docs/agents/AGENT_ROSTER.md`) to guide implementation order.
+- Implemented first-stage agents (ResourceSurveyor, TaskRefiner, RiskMonitor) with unit tests and integrated exports.
+- Added mid-stage agents (PlannerAgent, DesignAdvisor, ImplementerAgent) with dedicated workflow tests.
 
 ## Archived Pipeline State (Feb 9, 2026)
 
