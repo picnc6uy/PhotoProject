@@ -13,6 +13,9 @@ from .agents import (
     PlannerAgent,
     DesignAdvisor,
     ImplementerAgent,
+    TestRunnerAgent,
+    CodeReviewer,
+    RequirementsVerifier,
 )
 
 __all__ = [
@@ -26,6 +29,9 @@ __all__ = [
     "PlannerAgent",
     "DesignAdvisor",
     "ImplementerAgent",
+    "TestRunnerAgent",
+    "CodeReviewer",
+    "RequirementsVerifier",
     "TaskSpec",
     "Tool",
     "ToolRegistry",

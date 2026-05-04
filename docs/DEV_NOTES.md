@@ -18,6 +18,7 @@
 - Drafted agent rollout sequence (`docs/agents/AGENT_ROSTER.md`) to guide implementation order.
 - Implemented first-stage agents (ResourceSurveyor, TaskRefiner, RiskMonitor) with unit tests and integrated exports.
 - Added mid-stage agents (PlannerAgent, DesignAdvisor, ImplementerAgent) with dedicated workflow tests.
+- Implemented execution-stage agents (TestRunnerAgent, CodeReviewer, RequirementsVerifier) and validated workflows.
 
 ## Archived Pipeline State (Feb 9, 2026)
 
