@@ -22,9 +22,16 @@ def test_evaluation_harness_saves_results(tmp_path):
         metadata={"test_commands": ["echo pytest -q"]},
     )
 
-    results = run_evaluation(task, registry)
-    out_path = save_results(results, tmp_path)
+    records = run_evaluation(task, registry)
+    summary = {
+        "tests": {"passed": 0, "failed": 0, "skipped": 0},
+        "requirements": {"satisfied": 0, "unsatisfied": 0},
+        "red_team_verdict": "unknown",
+        "review_decision": "pending",
+    }
+    out_path = save_results(records, summary, tmp_path)
 
     assert out_path.exists()
     data = json.loads(out_path.read_text(encoding="utf-8"))
-    assert "ResourceSurveyor" in data
+    assert "ResourceSurveyor" in data["agents"]
+    assert "tests" in data["summary"]

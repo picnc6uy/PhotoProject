@@ -87,12 +87,57 @@ def run_evaluation(task: TaskSpec, registry: ToolRegistry) -> dict:
     return orchestrator.run_workflow(agents, task)
 
 
-def save_results(results: dict, directory: Path) -> Path:
+def summarize_results(records: dict) -> dict:
+    summary = {}
+
+    test_agent = records.get("TestRunnerAgent", {})
+    test_summary = test_agent.get("state", {}).get("artifacts", {}).get("test_run", {}).get("summary", {})
+    summary["tests"] = {
+        "passed": test_summary.get("passed", 0),
+        "failed": test_summary.get("failed", 0),
+        "skipped": test_summary.get("skipped", 0),
+    }
+
+    verification = records.get("RequirementsVerifier", {})
+    verification_summary = (
+        verification.get("state", {})
+        .get("artifacts", {})
+        .get("verification", {})
+        .get("summary", {})
+    )
+    summary["requirements"] = {
+        "satisfied": verification_summary.get("satisfied", 0),
+        "unsatisfied": verification_summary.get("unsatisfied", 0),
+    }
+
+    red_team = records.get("RedTeamReviewer", {})
+    verdict = (
+        red_team.get("state", {})
+        .get("artifacts", {})
+        .get("red_team", {})
+        .get("verdict", "unknown")
+    )
+    summary["red_team_verdict"] = verdict
+
+    review = records.get("CodeReviewer", {})
+    decision = (
+        review.get("state", {})
+        .get("artifacts", {})
+        .get("review", {})
+        .get("decision", "pending")
+    )
+    summary["review_decision"] = decision
+
+    return summary
+
+
+def save_results(records: dict, summary: dict, directory: Path) -> Path:
     directory.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    payload = {"agents": records, "summary": summary}
     path = directory / f"evaluation_{timestamp}.json"
     with path.open("w", encoding="utf-8") as handle:
-        json.dump(results, handle, indent=2, sort_keys=True)
+        json.dump(payload, handle, indent=2, sort_keys=True)
     return path
 
 
@@ -111,9 +156,13 @@ def main() -> None:
         if shell_tool and hasattr(shell_tool, "allowed_prefixes"):
             shell_tool.allowed_prefixes.extend(args.allow_shell)
 
-    results = run_evaluation(task, registry)
-    output = save_results(results, EVAL_DIR)
+    records = run_evaluation(task, registry)
+    summary = summarize_results(records)
+    output = save_results(records, summary, EVAL_DIR)
+
     print(f"Evaluation saved to {output}")
+    print("Summary:")
+    print(json.dumps(summary, indent=2))
 
 
 if __name__ == "__main__":

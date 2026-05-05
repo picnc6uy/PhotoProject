@@ -70,7 +70,7 @@ def make_task(task_file: Path | None) -> TaskSpec:
         requirements=["Survey resources", "Refine requirements", "Plan work"],
         metadata={
             "touches_docs": True,
-            "test_commands": ["echo pytest -q"],
+            "test_commands": ["pytest -q"],
         },
     )
 
