@@ -66,21 +66,33 @@ class ToolRegistry:
 class ShellCommandTool(Tool):
     """Executes shell commands with optional batching support."""
 
-    def __init__(self, working_dir: str | None = None, allow_network: bool = False):
+    DEFAULT_ALLOWED_PREFIXES = ["echo", "pytest", "flake8", "git status", "git add"]
+
+    def __init__(
+        self,
+        working_dir: str | None = None,
+        allow_network: bool = False,
+        allowed_prefixes: Optional[List[str]] = None,
+    ):
         super().__init__(name="shell", description="Execute shell commands in the workspace")
         self.default_working_dir = working_dir or "."
         self.allow_network = allow_network
+        self.allowed_prefixes = allowed_prefixes or list(self.DEFAULT_ALLOWED_PREFIXES)
 
     def run(self, command: str, context: ToolContext) -> str:  # type: ignore[override]
         return self._execute(command, context)
 
     def run_batch(self, commands: List[str], context: ToolContext) -> List[str]:  # type: ignore[override]
-        outputs: List[str] = []
-        for command in commands:
-            outputs.append(self._execute(command, context))
-        return outputs
+        return [self._execute(command, context) for command in commands]
+
+    def _allowed(self, command: str) -> bool:
+        stripped = command.lstrip()
+        return any(stripped.startswith(prefix) for prefix in self.allowed_prefixes)
 
     def _execute(self, command: str, context: ToolContext) -> str:
+        if not self._allowed(command):
+            return f"Command '{command}' is not permitted by shell allow-list."
+
         working_dir = context.working_dir or self.default_working_dir
         completed = subprocess.run(
             command,
