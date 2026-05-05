@@ -55,8 +55,13 @@ def load_task(path: Path) -> TaskSpec:
 
 def build_registry(workspace: Path) -> ToolRegistry:
     registry = ToolRegistry()
-    registry.register(ShellCommandTool(working_dir=str(workspace)))
-    registry.register(GitTool(working_dir=str(workspace)))
+    registry.register(
+        ShellCommandTool(
+            working_dir=str(workspace),
+            allowed_prefixes=["echo", "pytest", "flake8", "git status", "git add"],
+        )
+    )
+    registry.register(GitTool(working_dir=str(workspace), allowed_commands=["status", "diff", "add"]))
     registry.register(EditorTool(root=str(workspace)))
     return registry
 
@@ -95,11 +100,16 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run the agent workflow evaluation harness")
     parser.add_argument("--workspace", default=".", help="Workspace directory for tool execution")
     parser.add_argument("--task", type=Path, default=DEFAULT_TASK, help="Path to YAML task file")
+    parser.add_argument("--allow-shell", nargs="*", help="Additional shell command prefixes to allow")
     args = parser.parse_args()
 
     workspace = Path(args.workspace).resolve()
     task = load_task(Path(args.task))
     registry = build_registry(workspace)
+    if args.allow_shell:
+        shell_tool = registry.get("shell")
+        if shell_tool and hasattr(shell_tool, "allowed_prefixes"):
+            shell_tool.allowed_prefixes.extend(args.allow_shell)
 
     results = run_evaluation(task, registry)
     output = save_results(results, EVAL_DIR)

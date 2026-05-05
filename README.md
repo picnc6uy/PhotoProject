@@ -58,7 +58,7 @@ Build agents that can plan, implement, and evaluate software tasks in collaborat
 - Check `docs/agent_platform/ARCHITECTURE.md` for the PlantUML architecture overview.
 - Browse `docs/agent_platform/AGENT_ROSTER.md` for the ordered agent rollout.
 - Core Python package scaffolding lives under `src/agent_platform/` (including `orchestrator.py`).
-- Utility scripts live under `tools/agent_platform/` (e.g., `run_workflow.py`, `evaluate_workflow.py`).
+- Utility scripts live under `tools/agent_platform/` (e.g., `run_workflow.py`, `evaluate_workflow.py`).  Both accept `--allow-shell` to extend the shell allow-list per ADR-003.
 
 ---
 

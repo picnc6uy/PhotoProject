@@ -34,8 +34,13 @@ from agent_platform.tools import EditorTool, GitTool, ShellCommandTool, ToolRegi
 
 def build_registry(workspace: Path) -> ToolRegistry:
     registry = ToolRegistry()
-    registry.register(ShellCommandTool(working_dir=str(workspace)))
-    registry.register(GitTool(working_dir=str(workspace)))
+    registry.register(
+        ShellCommandTool(
+            working_dir=str(workspace),
+            allowed_prefixes=["echo", "pytest", "flake8", "git status", "git add"],
+        )
+    )
+    registry.register(GitTool(working_dir=str(workspace), allowed_commands=["status", "diff", "add"]))
     registry.register(EditorTool(root=str(workspace)))
     return registry
 
@@ -74,10 +79,19 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Run the agent orchestrator workflow")
     parser.add_argument("--workspace", default=".", help="Workspace directory for tool execution")
     parser.add_argument("--task-file", type=Path, help="Optional file describing the task")
+    parser.add_argument(
+        "--allow-shell",
+        nargs="*",
+        help="Additional shell command prefixes to allow (e.g., pytest -q)",
+    )
     args = parser.parse_args()
 
     workspace = Path(args.workspace).resolve()
     registry = build_registry(workspace)
+    if args.allow_shell:
+        shell_tool = registry.get("shell")
+        if shell_tool and hasattr(shell_tool, "allowed_prefixes"):
+            shell_tool.allowed_prefixes.extend(args.allow_shell)
     orchestrator = Orchestrator(registry)
 
     task = make_task(args.task_file)
@@ -106,3 +120,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
