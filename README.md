@@ -1,9 +1,11 @@
-# PhotoProject
+# picnc6uy (Agent-Platform)
+
+[![Orchestrator Workflow](https://github.com/picnc6uy/Agent-Platform/actions/workflows/orchestrator.yml/badge.svg)](https://github.com/picnc6uy/Agent-Platform/actions/workflows/orchestrator.yml)
 
 The repository now contains two tracks:
 
 1. **Archived Continue Pipeline (Record Cataloging)** – feature-complete OCR and enrichment workflow retained for reference.
-2. **Software Developer Agent Platform (Inception)** – new initiative to design agents capable of end-to-end software development assistance.
+2. **picnc6uy / Agent-Platform (Inception)** – new initiative to design agents capable of end-to-end software development assistance.
 
 ---
 
