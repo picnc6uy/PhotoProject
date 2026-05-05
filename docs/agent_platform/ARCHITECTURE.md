@@ -30,7 +30,7 @@ autonumber
 title Agent Platform DAG Overview
 
 actor "Task Requester" as requester
-rectangle "Knowledge Base\n(docs/agents/knowledge)" as knowledge
+rectangle "Knowledge Base\n(docs/agent_platform/knowledge)" as knowledge
 rectangle "Tool Registry" as tools
 rectangle "CacheStore" as cache
 rectangle "Evaluation Harness" as eval

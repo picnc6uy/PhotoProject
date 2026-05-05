@@ -12,14 +12,15 @@
 - The exploratory `feature/version2` branch has been created and shelved until the cataloging domain is revisited.
 - Focus is shifting to a new project centered on building agents capable of acting as software developers; new documentation will capture planning for that effort.
 - Agent platform bootstrapped with base abstractions (`Agent`, `TaskSpec`, `ToolRegistry`) and corresponding unit tests.
-- AgentArchitect reference agent added to guide agent-development workflows (see `docs/agents/AGENT_ARCHITECT.md`).
-- Knowledge base initialized under `docs/agents/knowledge/` with best-practice summaries, distilled notes, and placeholders for external research.
+- AgentArchitect reference agent added to guide agent-development workflows (see `docs/agent_platform/AGENT_ARCHITECT.md`).
+- Knowledge base initialized under `docs/agent_platform/knowledge/` with best-practice summaries, distilled notes, and placeholders for external research.
 - Orchestrator implemented (`src/agent_platform/orchestrator.py`) with JSON cache support and unit coverage (`test_orchestrator.py`).
-- Drafted agent rollout sequence (`docs/agents/AGENT_ROSTER.md`) to guide implementation order.
+- Drafted agent rollout sequence (`docs/agent_platform/AGENT_ROSTER.md`) to guide implementation order.
 - Implemented first-stage agents (ResourceSurveyor, TaskRefiner, RiskMonitor) with unit tests and integrated exports.
 - Added mid-stage agents (PlannerAgent, DesignAdvisor, ImplementerAgent) with dedicated workflow tests.
 - Implemented execution-stage agents (TestRunnerAgent, CodeReviewer, RequirementsVerifier) and validated workflows.
 - Completed release pipeline agents (IntegratorAgent, ReleaseCoordinator, PostMergeObserver) with scenario tests.
+- Consolidated documentation under `docs/agent_platform/` and added `tools/agent_platform/` helpers.
 
 ## Archived Pipeline State (Feb 9, 2026)
 

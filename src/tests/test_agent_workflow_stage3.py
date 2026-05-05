@@ -37,7 +37,7 @@ def base_task() -> TaskSpec:
             AcceptanceCriteria(description="Update docs"),
         ],
         metadata={
-            "test_commands": ["pytest -q", "flake8"],
+            "test_commands": ["echo pytest -q", "echo flake8"],
         },
     )
 

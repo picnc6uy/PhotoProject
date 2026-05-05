@@ -19,6 +19,7 @@ from .agents import (
     IntegratorAgent,
     ReleaseCoordinator,
     PostMergeObserver,
+    RedTeamReviewer,
 )
 
 __all__ = [
@@ -38,6 +39,7 @@ __all__ = [
     "IntegratorAgent",
     "ReleaseCoordinator",
     "PostMergeObserver",
+    "RedTeamReviewer",
     "TaskSpec",
     "Tool",
     "ToolRegistry",

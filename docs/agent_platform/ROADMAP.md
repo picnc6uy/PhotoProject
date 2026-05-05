@@ -5,7 +5,7 @@ _Last updated: 2026-02-10 (evening update)_
 ## Phase 0 — Foundations
 - [x] Draft project charter and glossary (`PROJECT_CHARTER.md`).
 - [x] Update top-level documentation to reflect pivot from record catalog pipeline.
-- [x] Seed agent knowledge base (`docs/agents/knowledge/`).
+- [x] Seed agent knowledge base (`docs/agent_platform/knowledge/`).
 - [ ] Define repository layout and coding standards for agent platform modules.
 
 ## Phase 1 — Architecture & Scaffolding

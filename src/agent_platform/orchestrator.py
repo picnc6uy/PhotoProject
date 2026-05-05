@@ -7,9 +7,9 @@ import json
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Sequence, Tuple, Type
 
-from .agents import Agent
+from .agents import Agent, AgentConfig
 from .tasks import TaskSpec
 from .tools import ToolRegistry
 
@@ -71,9 +71,11 @@ class Orchestrator:
         self,
         tools: ToolRegistry,
         cache_dir: Path | str = Path("dev_data/agent_platform/cache"),
+        default_max_iterations: int = 10,
     ):
         self.tools = tools
         self.cache = CacheStore(Path(cache_dir))
+        self.default_max_iterations = default_max_iterations
 
     def run(
         self,
@@ -95,6 +97,25 @@ class Orchestrator:
         if use_cache:
             self.cache.save(cache_key, record)
         return record.to_dict(), False
+
+    def run_workflow(
+        self,
+        agent_classes: Sequence[Type[Agent]],
+        task: TaskSpec,
+        *,
+        use_cache: bool = True,
+    ) -> Dict[str, Dict[str, Any]]:
+        """Execute a sequence of agents, returning a mapping of agent name to record."""
+
+        records: Dict[str, Dict[str, Any]] = {}
+        for agent_cls in agent_classes:
+            agent = agent_cls(
+                AgentConfig(name=agent_cls.__name__, max_iterations=self.default_max_iterations),
+                self.tools,
+            )
+            record, _ = self.run(agent, task, use_cache=use_cache)
+            records[agent_cls.__name__] = record
+        return records
 
     def _build_record(
         self,

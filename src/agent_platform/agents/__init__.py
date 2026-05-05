@@ -14,6 +14,7 @@ from .requirements_verifier import RequirementsVerifier
 from .integrator_agent import IntegratorAgent
 from .release_coordinator import ReleaseCoordinator
 from .post_merge_observer import PostMergeObserver
+from .red_team_reviewer import RedTeamReviewer
 
 __all__ = [
     "Agent",
@@ -32,4 +33,5 @@ __all__ = [
     "IntegratorAgent",
     "ReleaseCoordinator",
     "PostMergeObserver",
+    "RedTeamReviewer",
 ]

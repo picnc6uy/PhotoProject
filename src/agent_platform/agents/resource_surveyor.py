@@ -84,7 +84,7 @@ class ResourceSurveyor(Agent):
         )
 
     def _default_knowledge_topics(self) -> List[str]:
-        knowledge_dir = Path("docs/agents/knowledge")
+        knowledge_dir = Path("docs/agent_platform/knowledge")
         if not knowledge_dir.exists():
             return []
         return [path.name for path in sorted(knowledge_dir.glob("*.md"))]
@@ -92,8 +92,8 @@ class ResourceSurveyor(Agent):
     def _default_workspace_docs(self) -> List[str]:
         defaults = [
             "MASTER_PROJECT_CONTEXT.md",
-            "docs/agents/PROJECT_CHARTER.md",
-            "docs/agents/ROADMAP.md",
-            "docs/agents/AGENT_PLATFORM_ARCHITECTURE.md",
+            "docs/agent_platform/PROJECT_CHARTER.md",
+            "docs/agent_platform/ROADMAP.md",
+            "docs/agent_platform/ARCHITECTURE.md",
         ]
         return defaults

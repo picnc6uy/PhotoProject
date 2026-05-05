@@ -43,7 +43,7 @@ Deliver a modular agent platform that:
 - Evaluation harness with baseline tasks and scoring criteria.  
 - Example agent workflows demonstrating planning, coding, and validation loops.
 
-## Milestones (see `docs/agents/ROADMAP.md` for detailed tasks)
+## Milestones (see `docs/agent_platform/ROADMAP.md` for detailed tasks)
 1. Charter & architecture outline complete.  
 2. Core package scaffolding with base agent abstractions.  
 3. Tool registry and execution sandbox prototypes.  

@@ -93,7 +93,8 @@ The next active project will focus on designing and implementing autonomous agen
 
 - Defining requirements and success metrics for agent-assisted software delivery.
 - Establishing architecture, tooling, and evaluation harnesses tailored to agent workflows.
-- Capturing planning artifacts, roadmaps, and technical notes in new agent-specific documentation (see `docs/agents/PROJECT_CHARTER.md`, `docs/agents/ROADMAP.md`, and `docs/agents/AGENT_ARCHITECT.md`).
+- Capturing planning artifacts, roadmaps, and technical notes in new agent-specific documentation (see `docs/agent_platform/PROJECT_CHARTER.md`, `docs/agent_platform/ROADMAP.md`, and `docs/agent_platform/AGENT_ARCHITECT.md`).
+
 
 
 ## Additional Resources

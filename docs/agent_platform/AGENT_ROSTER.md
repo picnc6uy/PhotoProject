@@ -15,13 +15,15 @@ This document enumerates the planned agents from simplest to most complex, captu
 | 7 | **TestRunnerAgent** | Run designated tests, lint, and static analysis. | Implementer output + configured test commands. | Test results, logs, failure summaries. | ToolRegistry (shell, pytest). |
 | 8 | **CodeReviewer** | Evaluate code quality, style, and logical soundness. | Implementer output, test results. | Review comments, change requests. | ImplementerAgent, TestRunnerAgent. |
 | 9 | **RequirementsVerifier** | Ensure acceptance criteria are satisfied and gaps flagged. | Implementer output, refined acceptance criteria. | Verification checklist, unmet criteria. | TaskRefiner, CodeReviewer. |
-| 10 | **IntegratorAgent** | Stage accepted changes, prepare commits, update docs. | Approved diffs + review notes. | Commit message, documentation updates, merge instructions. | CodeReviewer, RequirementsVerifier, ToolRegistry (git, docs). |
-| 11 | **ReleaseCoordinator** | Orchestrate deployment tasks, publish artifacts, notify stakeholders. | Integrator output + release config. | Release checklist, deployment logs, notifications. | IntegratorAgent, external services. |
-| 12 | **PostMergeObserver** | Monitor post-release signals and trigger rollback if needed. | Release artifacts, monitoring feeds. | Observation report, rollback recommendation. | ReleaseCoordinator, external telemetry. |
+| 10 | **RedTeamReviewer** | Provide adversarial review and highlight escalation needs. | Planner/test/review metadata. | Risk findings, adversarial verdict. | CodeReviewer, RequirementsVerifier. |
+| 11 | **IntegratorAgent** | Stage accepted changes, prepare commits, update docs. | Approved diffs + review notes. | Commit message, documentation updates, merge instructions. | CodeReviewer, RequirementsVerifier, RedTeamReviewer, ToolRegistry (git, docs). |
+| 12 | **ReleaseCoordinator** | Orchestrate deployment tasks, publish artifacts, notify stakeholders. | Integrator output + release config. | Release checklist, deployment logs, notifications. | IntegratorAgent, external services. |
+| 13 | **PostMergeObserver** | Monitor post-release signals and trigger rollback if needed. | Release artifacts, monitoring feeds. | Observation report, rollback recommendation. | ReleaseCoordinator, external telemetry. |
 
 ## Design Notes
 - Early agents (ResourceSurveyor → RiskMonitor) are read-only and establish context before changes are proposed.
 - Implementer/TestRunner/CodeReviewer/RequirementsVerifier form the execution core and must operate under strict safety controls.
+- RedTeamReviewer adds adversarial scrutiny before integration.
 - Integrator, ReleaseCoordinator, and PostMergeObserver depend on solid auditing and human checkpoints before automated promotion/rollback logic is trusted.
 
 ## Next Actions
@@ -30,4 +32,4 @@ This document enumerates the planned agents from simplest to most complex, captu
 3. Implement TestRunnerAgent, CodeReviewer, and RequirementsVerifier with workflow validation (✔️).
 4. Implement IntegratorAgent, ReleaseCoordinator, and PostMergeObserver with stage-four tests (✔️).
 5. Extend the Orchestrator to support DAG execution (ResourceSurveyor → TaskRefiner → RiskMonitor → PlannerAgent → …).
-6. Define contracts/ADR entries for cross-agent orchestration and tooling policies.
+6. Define contracts/ADR entries for cross-agent orchestration and tooling policies, including red-team escalation paths.

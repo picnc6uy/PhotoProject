@@ -84,11 +84,15 @@ class TestRunnerAgent(Agent):
     def _execute_commands(self, commands: List[str]) -> List[Dict[str, Any]]:
         results: List[Dict[str, Any]] = []
         tool = self.tools.get("shell")
-        for command in commands:
-            if not tool:
-                results.append({"command": command, "status": "skipped", "output": "shell tool unavailable"})
-                continue
-            output = tool.run(command, ToolContext(working_dir="/workspace"))
+        if not commands:
+            return results
+        if not tool:
+            return [
+                {"command": command, "status": "skipped", "output": "shell tool unavailable"}
+                for command in commands
+            ]
+        outputs = tool.run_batch(commands, ToolContext(working_dir="/workspace"))
+        for command, output in zip(commands, outputs):
             status = "passed" if "error" not in output.lower() else "failed"
             results.append({
                 "command": command,

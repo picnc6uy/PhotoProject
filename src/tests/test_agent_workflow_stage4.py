@@ -31,7 +31,7 @@ def task_metadata() -> TaskSpec:
         requirements=["Stage code", "Notify stakeholders", "Monitor release"],
         metadata={
             "touches_docs": True,
-            "doc_updates": ["README.md", "docs/RELEASE_NOTES.md"],
+            "doc_updates": ["README.md", "docs/agent_platform/ARCHITECTURE.md"],
             "deployment_commands": ["./deploy.sh", "./notify.sh"],
             "monitoring_signals": [
                 {"metric": "error_rate", "value": 0.02},

@@ -116,7 +116,7 @@ def test_agent_architect_produces_workspace_specific_plan():
         metadata={
             "workspace_docs": [
                 "MASTER_PROJECT_CONTEXT.md",
-                "docs/agents/PROJECT_CHARTER.md",
+                "docs/agent_platform/PROJECT_CHARTER.md",
             ],
             "available_tools": ["shell: execute controlled shell commands"],
             "test_commands": ["pytest -q"],

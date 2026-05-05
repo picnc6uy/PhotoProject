@@ -9,6 +9,8 @@ The repository now contains two tracks:
 
 ## Continue Pipeline (archived for maintenance)
 
+Legacy source remains under `src/record_catalog/`; consider it read-only unless explicitly reactivated.
+
 ### Quick start (if revisiting the pipeline)
 1. Place source photos in `dev_data/record_catalog/data/inbox_photos`
 2. Run photo cataloging:
@@ -46,14 +48,15 @@ The repository now contains two tracks:
 Build agents that can plan, implement, and evaluate software tasks in collaboration with human developers.
 
 ### Bootstrap status
-- See `docs/agents/PROJECT_CHARTER.md` for goals, success criteria, and glossary.
-- See `docs/agents/ROADMAP.md` for milestone planning.
-- Review `docs/agents/AGENT_ARCHITECT.md` for the expert agent blueprint now available.
-- Browse `docs/agents/knowledge/` for curated references and research notes.
-- Review `docs/agents/ORCHESTRATOR_PLAN.md` for the orchestration roadmap.
-- Check `docs/agents/AGENT_PLATFORM_ARCHITECTURE.md` for the PlantUML architecture overview.
-- Browse `docs/agents/AGENT_ROSTER.md` for the ordered agent rollout.
+- See `docs/agent_platform/PROJECT_CHARTER.md` for goals, success criteria, and glossary.
+- See `docs/agent_platform/ROADMAP.md` for milestone planning.
+- Review `docs/agent_platform/AGENT_ARCHITECT.md` for the expert agent blueprint now available.
+- Browse `docs/agent_platform/knowledge/` for curated references and research notes.
+- Review `docs/agent_platform/ORCHESTRATOR_PLAN.md` for the orchestration roadmap.
+- Check `docs/agent_platform/ARCHITECTURE.md` for the PlantUML architecture overview.
+- Browse `docs/agent_platform/AGENT_ROSTER.md` for the ordered agent rollout.
 - Core Python package scaffolding lives under `src/agent_platform/` (including `orchestrator.py`).
+- Utility scripts live under `tools/agent_platform/` (e.g., `run_workflow.py`).
 
 ---
 

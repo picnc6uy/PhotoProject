@@ -143,7 +143,7 @@ class AgentArchitect(Agent):
         return recommendations
 
     def _default_knowledge_topics(self) -> List[str]:
-        knowledge_dir = Path("docs/agents/knowledge")
+        knowledge_dir = Path("docs/agent_platform/knowledge")
         topics: List[str] = []
         if knowledge_dir.exists():
             for path in sorted(knowledge_dir.glob("*.md")):
