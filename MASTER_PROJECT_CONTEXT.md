@@ -3,7 +3,8 @@ Last updated: 2026-02-10
 
 ## Current Status
 
-- The Continue record-catalog pipeline (v1) is feature-complete and now in maintenance mode.
+- The Continue record-catalog pipeline (v1), now located under `photo_project/`, is feature-complete and in maintenance mode.
+
 - Future enhancements captured on branch `feature/version2` are paused until work resumes.
 - Active development is pivoting to a new initiative focused on building software developer agents.
 - AgentArchitect reference agent established to advise on agent-building workflows within this repository.
@@ -27,7 +28,8 @@ Key features:
 - Local `.env` file is used for API tokens and is ignored by git.
 - Testing covers preprocessing, OCR extraction, parsing, and pipeline integration; enrichment validation is pending.
 - Designed incrementally with clear module separation, logging, error handling, and modular object-oriented pipeline components.
-  - Operational details and tuning parameters live in docs/DEV_NOTES.md and src/config.yaml.
+    - Operational details and tuning parameters live in docs/DEV_NOTES.md and photo_project/src/config.yaml.
+
 
 ---
 
@@ -70,8 +72,9 @@ Each pipeline stage is implemented as a modular object-oriented component with c
 
 - Workspace Root: C:\Users\ghendrick\PhotoProject
 - Python 3.12.8 with pip 25.3 installed.
-- Project directories include .utils, dev_data, index, sessions, src, types.
-- Key config files: config.yaml, package.json, tsconfig.json.
+- Project directories include agent_platform/ resources (`docs/agent_platform`, `tools/agent_platform`, etc.) and the archived photo pipeline under `photo_project/`.
+- Key config files: photo_project/src/config.yaml (pipeline), package.json, tsconfig.json.
+
 - Secrets should be stored in `.env` (not committed).
 
 ---

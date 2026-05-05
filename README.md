@@ -2,45 +2,45 @@
 
 [![Orchestrator Workflow](https://github.com/picnc6uy/Agent-Platform/actions/workflows/orchestrator.yml/badge.svg)](https://github.com/picnc6uy/Agent-Platform/actions/workflows/orchestrator.yml)
 
-The repository now contains two tracks:
+The repository now contains two applications hosted side-by-side:
 
-1. **Archived Continue Pipeline (Record Cataloging)** – feature-complete OCR and enrichment workflow retained for reference.
-2. **picnc6uy / Agent-Platform (Inception)** – new initiative to design agents capable of end-to-end software development assistance.
+1. **photo_project/** – archived record cataloging pipeline (OCR/enrichment). Ready to split into its own repo.
+2. **picnc6uy / Agent-Platform** – new initiative to design agents capable of end-to-end software development assistance.
 
 ---
 
-## Continue Pipeline (archived for maintenance)
+## Photo_Project (archived for maintenance)
 
-Legacy source remains under `src/record_catalog/`; consider it read-only unless explicitly reactivated.
+Legacy source now lives under `photo_project/src/record_catalog/`; consider it read-only unless explicitly reactivated.
 
 ### Quick start (if revisiting the pipeline)
-1. Place source photos in `dev_data/record_catalog/data/inbox_photos`
+1. Place source photos in `photo_project/dev_data/record_catalog/data/inbox_photos`
 2. Run photo cataloging:
-   - `pytest -q src/test_photo_catalog.py`
+   - `pytest -q photo_project/tests/test_photo_catalog.py`
 3. Run preprocessing:
-   - `pytest -q src/tests/test_batch_resize_images.py`
+   - `pytest -q photo_project/tests/test_batch_resize_images.py`
 4. Run OCR (uses live API keys):
-   - `pytest -q src/tests/test_ocr_service.py`
+   - `pytest -q photo_project/tests/test_ocr_service.py`
 5. Run parsing:
-   - `pytest -q src/tests/test_ocr_to_parser.py`
+   - `pytest -q photo_project/tests/test_ocr_to_parser.py`
 6. Run enrichment:
-   - `pytest -q src/tests/test_enrich_consolidated.py`
+   - `pytest -q photo_project/tests/test_enrich_consolidated.py`
 
 ### Outputs
-- Photo catalog: `dev_data/record_catalog/data/outputs/photo_catalog.csv`
-- OCR raw: `dev_data/record_catalog/data/ocr_texts.csv`
-- Parsed metadata: `dev_data/record_catalog/data/parsed_metadata.csv`
-- Review suggestions: `dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv`
-- Enrichment candidates: `dev_data/record_catalog/data/outputs/enrichment_candidates.csv`
-- Resolved enrichment: `dev_data/record_catalog/data/outputs/enriched_resolved.csv`
-- Final archival (all rows): `dev_data/record_catalog/data/outputs/final_archival_catalog.csv`
-- Final archival (consolidated): `dev_data/record_catalog/data/outputs/final_archival_catalog_consolidated.csv`
-- Final total catalog: `dev_data/record_catalog/data/outputs/final_total_catalog.csv`
-- Validation report: `dev_data/record_catalog/data/outputs/catalog_validation_report.csv`
+- Photo catalog: `photo_project/dev_data/record_catalog/data/outputs/photo_catalog.csv`
+- OCR raw: `photo_project/dev_data/record_catalog/data/ocr_texts.csv`
+- Parsed metadata: `photo_project/dev_data/record_catalog/data/parsed_metadata.csv`
+- Review suggestions: `photo_project/dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv`
+- Enrichment candidates: `photo_project/dev_data/record_catalog/data/outputs/enrichment_candidates.csv`
+- Resolved enrichment: `photo_project/dev_data/record_catalog/data/outputs/enriched_resolved.csv`
+- Final archival (all rows): `photo_project/dev_data/record_catalog/data/outputs/final_archival_catalog.csv`
+- Final archival (consolidated): `photo_project/dev_data/record_catalog/data/outputs/final_archival_catalog_consolidated.csv`
+- Final total catalog: `photo_project/dev_data/record_catalog/data/outputs/final_total_catalog.csv`
+- Validation report: `photo_project/dev_data/record_catalog/data/outputs/catalog_validation_report.csv`
 
 ### End-to-end pipeline
 - Non-interactive run through resolved outputs and final archival exports:
-  - `python src/run_pipeline.py --stop-after resolve`
+  - `python photo_project/src/run_pipeline.py --stop-after resolve`
 
 ---
 
