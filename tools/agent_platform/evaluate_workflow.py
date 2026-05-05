@@ -29,7 +29,7 @@ from agent_platform import (
 )
 from agent_platform.agents import CodeReviewer, RedTeamReviewer
 from agent_platform.orchestrator import Orchestrator
-from agent_platform.tools import ShellCommandTool, ToolRegistry
+from agent_platform.tools import EditorTool, GitTool, ShellCommandTool, ToolRegistry
 
 DEFAULT_TASK = Path("dev_data/agent_platform/tasks/sample_task.yaml")
 EVAL_DIR = Path("dev_data/agent_platform/evaluations")
@@ -56,6 +56,8 @@ def load_task(path: Path) -> TaskSpec:
 def build_registry(workspace: Path) -> ToolRegistry:
     registry = ToolRegistry()
     registry.register(ShellCommandTool(working_dir=str(workspace)))
+    registry.register(GitTool(working_dir=str(workspace)))
+    registry.register(EditorTool(root=str(workspace)))
     return registry
 
 

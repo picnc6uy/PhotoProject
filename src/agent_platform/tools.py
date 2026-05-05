@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import abc
-from dataclasses import dataclass
-from typing import Dict, Iterable, List, Optional
+import shlex
 import subprocess
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Dict, Iterable, List, Optional
 
 
 @dataclass
@@ -107,3 +109,99 @@ class ShellCommandTool(Tool):
         if completed.returncode != 0 and not output:
             output = f"Command exited with status {completed.returncode}"
         return output
+
+
+class GitTool(Tool):
+    """Restricted git command executor."""
+
+    DEFAULT_ALLOWED_COMMANDS = ["status", "diff", "add"]
+
+    def __init__(
+        self,
+        working_dir: str | None = None,
+        allowed_commands: Optional[List[str]] = None,
+    ):
+        super().__init__(name="git", description="Execute git commands with safeguards")
+        self.default_working_dir = Path(working_dir or ".").resolve()
+        self.allowed_commands = allowed_commands or list(self.DEFAULT_ALLOWED_COMMANDS)
+
+    def _resolve(self, context: ToolContext) -> Path:
+        base = Path(context.working_dir or self.default_working_dir).resolve()
+        if not str(base).startswith(str(self.default_working_dir)):
+            raise ValueError("GitTool: working directory escapes workspace root")
+        return base
+
+    def _allowed(self, command: str) -> bool:
+        parts = shlex.split(command)
+        if not parts:
+            return False
+        return parts[0] in self.allowed_commands
+
+    def run(self, command: str, context: ToolContext) -> str:  # type: ignore[override]
+        if not self._allowed(command):
+            return f"git {command} is not permitted."
+        base = self._resolve(context)
+        parts = ["git", *shlex.split(command)]
+        completed = subprocess.run(parts, cwd=base, capture_output=True, text=True)
+        output = completed.stdout.strip()
+        if completed.stderr:
+            output = f"{output}\n{completed.stderr.strip()}" if output else completed.stderr.strip()
+        if completed.returncode != 0 and not output:
+            output = f"git command exited with status {completed.returncode}"
+        return output
+
+    def run_batch(self, commands: List[str], context: ToolContext) -> List[str]:  # type: ignore[override]
+        return [self.run(command, context) for command in commands]
+
+
+class EditorTool(Tool):
+    """Minimal file read/write tool with safeguards."""
+
+    def __init__(
+        self,
+        root: str | None = None,
+        *,
+        allow_write: bool = False,
+        max_bytes: int = 16384,
+    ):
+        super().__init__(name="editor", description="Preview or edit files with safeguards")
+        self.root = Path(root or ".").resolve()
+        self.allow_write = allow_write
+        self.max_bytes = max_bytes
+
+    def _resolve_path(self, path: str, context: ToolContext) -> Path:
+        base = Path(context.working_dir or self.root).resolve()
+        target = (base / path).resolve()
+        if not str(target).startswith(str(self.root)):
+            raise ValueError("EditorTool: path escapes workspace root")
+        return target
+
+    def run(self, command: str, context: ToolContext) -> str:  # type: ignore[override]
+        action, _, payload = command.partition(" ")
+        action = action.lower()
+        payload = payload.strip()
+
+        if action == "read":
+            path = self._resolve_path(payload, context)
+            if not path.exists():
+                return f"File not found: {payload}"
+            data = path.read_bytes()[: self.max_bytes]
+            return data.decode("utf-8", errors="replace")
+
+        if action == "write":
+            if not self.allow_write:
+                return "Write operation not permitted by EditorTool."
+            path_part, _, content = payload.partition("::")
+            path = self._resolve_path(path_part, context)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(content, encoding="utf-8")
+            return f"Wrote {len(content)} characters to {path_part}"
+
+        if action == "preview":
+            path = self._resolve_path(payload, context)
+            if not path.exists():
+                return f"File not found: {payload}"
+            lines = path.read_text(encoding="utf-8", errors="replace").splitlines()[:20]
+            return "\n".join(lines)
+
+        return "EditorTool: action not recognised."
