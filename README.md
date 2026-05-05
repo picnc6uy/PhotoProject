@@ -53,6 +53,7 @@ Build agents that can plan, implement, and evaluate software tasks in collaborat
 - Review `docs/agent_platform/AGENT_ARCHITECT.md` for the expert agent blueprint now available.
 - Browse `docs/agent_platform/knowledge/` for curated references and research notes.
 - Review `docs/agent_platform/contracts/` for per-agent contracts.
+- Task specification schema lives at `docs/agent_platform/task_schema.yaml`; evaluation harness validates loaded tasks.
 - See `docs/agent_platform/adrs/` for recorded architecture decisions.
 - Review `docs/agent_platform/ORCHESTRATOR_PLAN.md` for the orchestration roadmap.
 - Check `docs/agent_platform/ARCHITECTURE.md` for the PlantUML architecture overview.

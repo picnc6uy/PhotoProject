@@ -9,7 +9,7 @@ sys.path.append(str(ROOT))
 
 from agent_platform.tasks import TaskSpec
 from agent_platform.tools import ToolRegistry, ShellCommandTool
-from tools.agent_platform.evaluate_workflow import run_evaluation, save_results
+from tools.agent_platform.evaluate_workflow import run_evaluation, save_results, summarize_results
 
 
 def test_evaluation_harness_saves_results(tmp_path):
@@ -23,12 +23,7 @@ def test_evaluation_harness_saves_results(tmp_path):
     )
 
     records = run_evaluation(task, registry)
-    summary = {
-        "tests": {"passed": 0, "failed": 0, "skipped": 0},
-        "requirements": {"satisfied": 0, "unsatisfied": 0},
-        "red_team_verdict": "unknown",
-        "review_decision": "pending",
-    }
+    summary = summarize_results(records)
     out_path = save_results(records, summary, tmp_path)
 
     assert out_path.exists()

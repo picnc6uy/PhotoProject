@@ -42,15 +42,36 @@ def load_task(path: Path) -> TaskSpec:
         if yaml is None:
             raise RuntimeError("PyYAML is required to load YAML evaluation tasks.")
         data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-        return TaskSpec(
+        task = TaskSpec(
             title=data.get("title", path.stem),
             summary=data.get("summary", ""),
             requirements=data.get("requirements", []),
             acceptance=data.get("acceptance", []),
             metadata=data.get("metadata", {}),
         )
+        validate_task_spec(task)
+        return task
     text = path.read_text(encoding="utf-8")
-    return TaskSpec(title=path.stem, summary=text[:200], requirements=[text])
+    task = TaskSpec(title=path.stem, summary=text[:200], requirements=[text])
+    validate_task_spec(task)
+    return task
+
+
+def validate_task_spec(task: TaskSpec) -> None:
+    if not isinstance(task.title, str) or not task.title:
+        raise ValueError("TaskSpec.title must be a non-empty string")
+    if not isinstance(task.summary, str):
+        raise ValueError("TaskSpec.summary must be a string")
+    if not isinstance(task.requirements, list) or not all(isinstance(req, str) for req in task.requirements):
+        raise ValueError("TaskSpec.requirements must be a list of strings")
+    if task.acceptance:
+        if not isinstance(task.acceptance, list):
+            raise ValueError("TaskSpec.acceptance must be a list")
+        for criterion in task.acceptance:
+            if not isinstance(criterion, dict):
+                raise ValueError("Acceptance criteria must be dictionaries")
+    if task.metadata and not isinstance(task.metadata, dict):
+        raise ValueError("TaskSpec.metadata must be a mapping")
 
 
 def build_registry(workspace: Path) -> ToolRegistry:
