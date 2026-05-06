@@ -75,3 +75,4 @@ Build agents that can plan, implement, and evaluate software tasks in collaborat
 - Pipeline config is `src/config.yaml` (root `config.ts` is for the Continue IDE).
 - Legacy materials are tracked under `legacy/` for historical reference.
 
+\n## Personal Record System (new)\n\n- Location: personal_record_system/\n- Provides the self-owned data pod scaffold (FastAPI, SQLite, Docker).\n- See personal_record_system/README.md for setup instructions.\n
