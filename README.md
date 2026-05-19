@@ -1,11 +1,6 @@
 # picnc6uy (Agent-Platform)
 
-[![Orchestrator Workflow](https://github.com/picnc6uy/Agent-Platform/actions/workflows/orchestrator.yml/badge.svg)](https://github.com/picnc6uy/Agent-Platform/actions/workflows/orchestrator.yml)
-
-The repository now contains two applications hosted side-by-side:
-
-1. **photo_project/** – archived record cataloging pipeline (OCR/enrichment). Ready to split into its own repo.
-2. **picnc6uy / Agent-Platform** – new initiative to design agents capable of end-to-end software development assistance.
+Photo cataloging pipeline. OCR + structured metadata extraction + Discogs enrichment for record labels.
 
 ---
 
@@ -41,27 +36,6 @@ Legacy source now lives under `photo_project/src/record_catalog/`; consider it r
 ### End-to-end pipeline
 - Non-interactive run through resolved outputs and final archival exports:
   - `python photo_project/src/run_pipeline.py --stop-after resolve`
-
----
-
-## Software Developer Agent Platform (new)
-
-### Mission
-Build agents that can plan, implement, and evaluate software tasks in collaboration with human developers.
-
-### Bootstrap status
-- See `docs/agent_platform/PROJECT_CHARTER.md` for goals, success criteria, and glossary.
-- See `docs/agent_platform/ROADMAP.md` for milestone planning.
-- Review `docs/agent_platform/AGENT_ARCHITECT.md` for the expert agent blueprint now available.
-- Browse `docs/agent_platform/knowledge/` for curated references and research notes.
-- Review `docs/agent_platform/contracts/` for per-agent contracts.
-- Task specification schema lives at `docs/agent_platform/task_schema.yaml`; evaluation harness validates loaded tasks.
-- See `docs/agent_platform/adrs/` for recorded architecture decisions.
-- Review `docs/agent_platform/ORCHESTRATOR_PLAN.md` for the orchestration roadmap.
-- Check `docs/agent_platform/ARCHITECTURE.md` for the PlantUML architecture overview.
-- Browse `docs/agent_platform/AGENT_ROSTER.md` for the ordered agent rollout.
-- Core Python package scaffolding lives under `src/agent_platform/` (including `orchestrator.py`).
-- Utility scripts live under `tools/agent_platform/` (e.g., `run_workflow.py`, `evaluate_workflow.py`).  Both accept `--allow-shell` to extend the shell allow-list per ADR-003.  The evaluation harness now emits a summary (test pass/fail, review verdicts, red-team status).
 
 ---
 

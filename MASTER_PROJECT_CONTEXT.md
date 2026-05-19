@@ -72,7 +72,7 @@ Each pipeline stage is implemented as a modular object-oriented component with c
 
 - Workspace Root: C:\Users\ghendrick\PhotoProject
 - Python 3.12.8 with pip 25.3 installed.
-- Project directories include agent_platform/ resources (`docs/agent_platform`, `tools/agent_platform`, etc.) and the archived photo pipeline under `photo_project/`.
+- Project directories: `photo_project/` (record cataloging pipeline). Legacy materials under `legacy/`.
 - Key config files: photo_project/src/config.yaml (pipeline), package.json, tsconfig.json.
 
 - Secrets should be stored in `.env` (not committed).
@@ -89,16 +89,6 @@ Each pipeline stage is implemented as a modular object-oriented component with c
 - Confirm deletions or renames prior to execution.
 
 ---
-
-## New Initiative: Software Developer Agent Platform
-
-The next active project will focus on designing and implementing autonomous agents that can operate as end-to-end software developers. Initial objectives include:
-
-- Defining requirements and success metrics for agent-assisted software delivery.
-- Establishing architecture, tooling, and evaluation harnesses tailored to agent workflows.
-- Capturing planning artifacts, roadmaps, and technical notes in new agent-specific documentation (see `docs/agent_platform/PROJECT_CHARTER.md`, `docs/agent_platform/ROADMAP.md`, and `docs/agent_platform/AGENT_ARCHITECT.md`).
-
-
 
 ## Additional Resources
 
