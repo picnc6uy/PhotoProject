@@ -70,7 +70,9 @@ removed in favour of canonical `spec_agents` and `personal_os` siblings.
 
 - **Pre-commit + detect-secrets** — XR-004 (gated on D-4).
 - **Rename to `photo_archive` + restructure on `spec_agents`** — D-4
-  (operator decision, awaiting sign-off).
+  **SIGNED 2026-05-20**; execution gated on operator initiation. Unlocks
+  XR-004 (apply canonical conventions), XR-007 (retire-duplicates final
+  pass), T-033 (Claude vision pipeline), LENS-002 (cataloging lens).
 - **Claude vision end-to-end** — T-033 (P3 in FIXES.md, promote once
   D-4 lands).
 - **Full pytest suite hang on integration tests** — pre-existing; gate

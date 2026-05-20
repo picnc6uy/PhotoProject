@@ -1,9 +1,16 @@
-# CLAUDE.md — PhotoProject
+# CLAUDE.md — PhotoProject (→ photo_archive after D-4 execution)
 
 > **Fresh session?** Start at [../planning/HANDOVER.md](../planning/HANDOVER.md) for the
-> canonical session-start brief: project map, cross-repo state, the `agent-task`
-> workflow, and operating principles. **Then** read this file and follow the
-> session-start protocol below for PhotoProject-specific context.
+> canonical session-start brief, then cross-reference architectural posture in
+> [../planning/v2 architecture/v2 architecture - Unknown.md](../planning/v2%20architecture/v2%20architecture%20-%20Unknown.md)
+> (the v2 charter). **Then** read this file and follow the session-start
+> protocol below for PhotoProject-specific context.
+>
+> **Note (2026-05-20):** D-4 signed — rename to `photo_archive` + restructure
+> on `spec_agents` approved. Multi-step execution gated on operator
+> initiation. XR-006 signed — `AGENTS.md` is canonical going forward; this
+> `CLAUDE.md` (and the sibling `AGENTS.md`) collapse to one source-of-truth
+> file when XR-006 executes.
 
 ---
 
@@ -44,10 +51,12 @@ main checkout directly during an `agent-task` cycle.
 
 ## Conventions still to land
 
-Per SYSTEM.md XR-004 (P1, gated on D-4), this repo is not yet on the canonical-stack
-conventions: no `pyproject.toml`, no ruff/pyright strict, no structlog, no pre-commit,
-no alembic. `ROADMAP.md` and the older `docs/DEV_NOTES.md` predate the 2026-05-19
-pivot and contain stale claims — treat as historical, not current state.
+Per SYSTEM.md XR-004 (P1, **D-4 signed 2026-05-20**, execution gated on
+operator initiation), this repo is not yet on the canonical-stack
+conventions: no `pyproject.toml`, no ruff/pyright strict, no structlog, no
+pre-commit, no alembic. `ROADMAP.md` and the older `docs/DEV_NOTES.md`
+predate the 2026-05-19 pivot and contain stale claims — treat as
+historical, not current state.
 
 ## Local dev quirks
 
