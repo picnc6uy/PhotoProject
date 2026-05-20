@@ -17,8 +17,13 @@ inbox_photos_extended/
 
 # Local secrets / credentials
 oai_key.txt
-/config.yaml
+config.yaml
+**/config.local.yaml
+photo_project/src/config.yaml
 .env
+.env.*
+!.env.example
+*.log
 
 # OS / editor
 .DS_Store
