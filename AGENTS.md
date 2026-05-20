@@ -1,21 +1,72 @@
-# AGENTS.md
+# AGENTS.md — PhotoProject (→ photo_archive after D-4 execution)
 
-## Startup Context
+> **Fresh session?** Start at [../planning/HANDOVER.md](../planning/HANDOVER.md) for the
+> canonical session-start brief, then cross-reference architectural posture in
+> [../planning/v2-charter.md](../planning/v2-charter.md) (the v2 charter).
+> **Then** read this file and follow the session-start protocol below for
+> PhotoProject-specific context.
+>
+> **Drift discipline:** at session start and task close, run the
+> [drift-audit lens](../planning/agent-task/agent-templates/lenses/drift-audit.md).
+> Fix doc drift before working over stale context.
+>
+> **Note (2026-05-20):** D-4 signed — rename to `photo_archive` + restructure
+> on `spec_agents` approved. Multi-step execution gated on operator
+> initiation.
 
-On each new chat/session, read these files in order before proceeding:
+---
 
-1. **[docs/CURRENT_STATE.md](docs/CURRENT_STATE.md)** — single source of truth for
-   what's shipped, what's pending, what's broken. **Read this first.**
-2. **[../planning/HANDOVER.md](../planning/HANDOVER.md)** — cross-repo session-start
-   brief (project map, the `agent-task` workflow, operating principles).
-3. **[CLAUDE.md](CLAUDE.md)** — PhotoProject-specific context + the five-step
-   session-start protocol.
-4. **[.agent/README.md](.agent/README.md)** — the on-disk task-contract loop.
-   If a task is staged at `.agent/tasks/<id>.md`, read it AND the lens it names
-   at `.agent/lenses/<type>.md` before touching code.
+## Session-Start Protocol
 
-`ROADMAP.md` and `docs/DEV_NOTES.md` predate the 2026-05-19 retire-duplicates
-sprint and contain stale claims (e.g. "agent uses OpenAI Codex with GPT-5" —
-Codex was removed). Treat them as historical context, not current state.
-`MASTER_PROJECT_CONTEXT.md` was removed 2026-05-20 (superseded by
-CURRENT_STATE.md); recover from git history if needed.
+When starting a new session on PhotoProject, do these five things before
+proposing or executing any work:
+
+1. **Read [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md)** — snapshot of where things are right now (commit, tests, recently landed, known issues).
+2. **Read [../planning/FIXES.md](../planning/FIXES.md)** for the T-* backlog and [../planning/SYSTEM.md](../planning/SYSTEM.md) for cross-repo tasks affecting PhotoProject (XR-004, T-033).
+3. **Verify the build:** `python -m pytest -m "not integration" -q` should match the test count in CURRENT_STATE.md (full suite hangs on external-service tests).
+4. **Verify git is clean:** `git status --short` should be clean (or only show expected untracked files).
+5. **Ask the operator which task to work on** — don't assume.
+
+If you find drift between CURRENT_STATE.md and reality, **fix the doc first** before doing other work. CURRENT_STATE.md is the contract.
+
+**main is linear-history only:** the branch protection rule forbids merge commits. Always rebase feature branches onto main before integrating; never `git merge --no-ff`.
+
+---
+
+## Repo-specific notes
+
+PhotoProject is the photo cataloging pipeline. After the 2026-05-19 retire-duplicates
+sprint (commits `766da10`, `ebe8b29` on `main`), this repo contains only the
+`photo_project/` record-cataloging app. The duplicate `src/agent_platform/` and
+`personal_record_system/` stubs were removed in favour of the canonical `spec_agents`
+and `personal_os` siblings.
+
+## Backlog
+
+Single source of truth: [../planning/FIXES.md](../planning/FIXES.md) (tasks T-001 through T-040). CURRENT_STATE.md tracks the rolling "recently landed" list.
+
+## Active work
+
+Check `.agent/tasks/` for the current task spec. If a worktree exists at
+`../PhotoProject--T-XXX/`, that is where active work happens — never edit the
+main checkout directly during an `agent-task` cycle.
+
+## Conventions still to land
+
+Per SYSTEM.md XR-004 (P1, **D-4 signed 2026-05-20**, execution gated on
+operator initiation), this repo is not yet on the canonical-stack
+conventions: no `pyproject.toml`, no ruff/pyright strict, no structlog, no
+pre-commit, no alembic. `ROADMAP.md` and the older `docs/DEV_NOTES.md`
+predate the 2026-05-19 pivot and contain stale claims — treat as
+historical, not current state.
+
+## Local dev quirks
+
+- `pytest.ini` is fixed (BOM stripped, `pythonpath = photo_project/src`); bare
+  `python -m pytest` from the repo root works without PYTHONPATH override.
+- Tests live at `photo_project/tests/` (not the legacy `tests/` or `src/tests_backup/`).
+- ConfigManager loads `.env` from CWD; pipeline scripts typically run from
+  `photo_project/`.
+- Real Azure CV + OpenAI API calls happen in tests marked `integration` (per
+  `pytest.ini` markers). The full suite hangs on these — always use
+  `-m "not integration"` for local runs.
