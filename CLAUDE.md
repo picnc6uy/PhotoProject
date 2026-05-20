@@ -2,9 +2,13 @@
 
 > **Fresh session?** Start at [../planning/HANDOVER.md](../planning/HANDOVER.md) for the
 > canonical session-start brief, then cross-reference architectural posture in
-> [../planning/v2 architecture/v2 architecture - Unknown.md](../planning/v2%20architecture/v2%20architecture%20-%20Unknown.md)
-> (the v2 charter). **Then** read this file and follow the session-start
-> protocol below for PhotoProject-specific context.
+> [../planning/v2-charter.md](../planning/v2-charter.md) (the v2 charter).
+> **Then** read this file and follow the session-start protocol below for
+> PhotoProject-specific context.
+>
+> **Drift discipline:** at session start and task close, run the
+> [drift-audit lens](../planning/agent-task/agent-templates/lenses/drift-audit.md).
+> Fix doc drift before working over stale context.
 >
 > **Note (2026-05-20):** D-4 signed — rename to `photo_archive` + restructure
 > on `spec_agents` approved. Multi-step execution gated on operator
