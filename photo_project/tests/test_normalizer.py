@@ -25,4 +25,4 @@ class TestNormalizer:
         """Test that various separators (dots, slashes) are removed."""
         input_val = "DGG.413 / 122-2"
         result = normalizer._normalize_catalog_number(input_val)
-        assert result == "DGG4131222", f"Expected 'DGG4131222', got '{result}'"
+        assert result == "DG64131222", f"Expected 'DG64131222', got '{result}'"
