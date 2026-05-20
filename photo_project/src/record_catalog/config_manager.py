@@ -2,6 +2,15 @@ import os
 import yaml
 import logging
 
+_ENV_ALLOW_LIST = frozenset({
+    "OPENAI_API_KEY",
+    "AZURE_COMPUTER_VISION_KEY",
+    "AZURE_COMPUTER_VISION_ENDPOINT",
+    "DISCOGS_TOKEN",
+    "MUSICBRAINZ_USER_AGENT",
+})
+
+
 class ConfigManager:
     """Reads and manages configuration and environment variables, including loading architecture manual."""
 
@@ -45,11 +54,15 @@ class ConfigManager:
             except Exception as e:
                 self.logger.error(f"Error loading .env: {e}")
 
-        # Load environment variables to override
+        # Merge environment overrides — restricted to keys already in the YAML
+        # config OR an explicit allow-list of known secret names. Copying the
+        # whole os.environ leaked PATH, AWS keys, etc. into self.config.
+        existing_keys = set(self.config.keys())
         for key, value in os.environ.items():
-            self.config[key] = value
+            if key in existing_keys or key in _ENV_ALLOW_LIST:
+                self.config[key] = value
 
-        self.logger.debug(f"Config keys after environment override: {list(self.config.keys())}")
+        self.logger.debug(f"Config keys after environment override: {sorted(self.config.keys())}")
 
         # Load architecture manual if path provided in config
         manual_path = self.config.get('ARCHITECTURE_MANUAL_PATH')
@@ -64,9 +77,9 @@ class ConfigManager:
                 self.logger.error(f"Error loading architecture manual from {manual_path}: {e}")
 
     def get(self, key, default=None):
-        value = self.config.get(key, default)
-        self.logger.debug(f"Config get: {key} = {value}")
-        return value
+        # Log only the key — values can be secrets (DISCOGS_TOKEN, *_API_KEY, etc).
+        self.logger.debug(f"Config get: {key}")
+        return self.config.get(key, default)
 
     def get_architecture_manual(self):
         return self.architecture_manual_text

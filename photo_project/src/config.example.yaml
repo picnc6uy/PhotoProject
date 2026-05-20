@@ -1,0 +1,56 @@
+# Example configuration for record catalog pipeline.
+# Copy to config.yaml and customise. Secrets MUST come from .env, not from this file.
+
+# --- Paths (set these to your local data layout) ---
+SOURCE_PHOTO_FOLDER: "C:/path/to/PhotoProject/dev_data/record_catalog/data/inbox_photos"
+PHOTO_CATALOG_OUTPUT_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/outputs/photo_catalog.csv"
+CIRCULAR_LABEL_IMAGE_FOLDER: "C:/path/to/PhotoProject/dev_data/record_catalog/data/inbox_photos_straightened"
+OCR_IMAGE_FOLDER: "C:/path/to/PhotoProject/dev_data/record_catalog/data/inbox_photos_ocr"
+OCR_AZURE_RESULTS_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/ocr_azure_results.csv"
+OCR_PARSED_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/ocr_texts.csv"
+PARSED_METADATA_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/parsed_metadata.csv"
+REVIEW_SUGGESTIONS_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/outputs/catalog_review_suggestions.csv"
+ENRICHMENT_CANDIDATES_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/outputs/enrichment_candidates.csv"
+ENRICHED_RESOLVED_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/outputs/enriched_resolved.csv"
+FINAL_ARCHIVAL_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/outputs/final_archival_catalog.csv"
+FINAL_ARCHIVAL_CONSOLIDATED_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/outputs/final_archival_catalog_consolidated.csv"
+FINAL_TOTAL_CATALOG_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/outputs/final_total_catalog.csv"
+CATALOG_VALIDATION_REPORT_CSV: "C:/path/to/PhotoProject/dev_data/record_catalog/data/outputs/catalog_validation_report.csv"
+CATALOG_OUTPUT_PATH: "C:/path/to/PhotoProject/dev_data/record_catalog/data/outputs/record_catalog.csv"
+
+# --- Secrets — DO NOT put values here. Set them in .env (see .env.example). ---
+# AZURE_COMPUTER_VISION_KEY: loaded from environment
+# AZURE_COMPUTER_VISION_ENDPOINT: loaded from environment
+# OPENAI_API_KEY: loaded from environment
+# DISCOGS_TOKEN: loaded from environment
+# MUSICBRAINZ_USER_AGENT: loaded from environment
+
+USE_MUSICBRAINZ: "false"
+
+# --- OCR retry / pacing ---
+MAX_OCR_RETRIES: 10
+OCR_RETRY_DELAY: 1
+OCR_INTER_IMAGE_DELAY: 7
+
+# --- Image processing ---
+MAX_DESCRIPTION_DIMENSION: 1024
+MAX_OCR_DIMENSION: 4200
+JPEG_QUALITY: 85
+
+# --- Preprocessing tuning ---
+PREPROCESS_MODE: "ocr_smooth"
+CLAHE_CLIP_LIMIT: 3.0
+CLAHE_TILE_GRID_SIZE: [8, 8]
+BILATERAL_D: 7
+BILATERAL_SIGMA_COLOR: 90
+BILATERAL_SIGMA_SPACE: 90
+ADAPTIVE_THRESH_BLOCK_SIZE: 21
+ADAPTIVE_THRESH_C: 5
+MORPH_KERNEL_SIZE: 3
+SHARPEN_RADIUS: 1.2
+SHARPEN_PERCENT: 130
+SHARPEN_THRESHOLD: 3
+BACKGROUND_KERNEL_SIZE: 31
+GAMMA_CORRECTION: 1.1
+AUTO_ROTATE: false
+AUTO_ROTATE_MAX_DEG: 45
