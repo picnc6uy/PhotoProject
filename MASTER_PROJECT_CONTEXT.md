@@ -70,10 +70,11 @@ Each pipeline stage is implemented as a modular object-oriented component with c
 
 ## Environment Facts
 
-- Workspace Root: C:\Users\ghendrick\PhotoProject
+- Workspace Root: C:\Users\ghendrick\PhotoProject (canonical). Active tasks run in worktrees at C:\Users\ghendrick\PhotoProject--T-XXX\ — never edit the canonical root during an `agent-task` cycle.
+- Sibling repos: `../spec_agents` (foundation lib), `../spectacular` (crypto intel), `../personal_os` (personal data pod), `../lightwork_lead_engine` (HTML business tool). See `../planning/SYSTEM.md` for the cross-repo architecture.
 - Python 3.12.8 with pip 25.3 installed.
 - Project directories: `photo_project/` (record cataloging pipeline). Legacy materials under `legacy/`.
-- Key config files: photo_project/src/config.yaml (pipeline), package.json, tsconfig.json.
+- Key config files: photo_project/src/config.yaml (pipeline, gitignored; copy from config.example.yaml), package.json, tsconfig.json.
 
 - Secrets should be stored in `.env` (not committed).
 
@@ -81,7 +82,7 @@ Each pipeline stage is implemented as a modular object-oriented component with c
 
 ## Agent Contract Summary
 
-- Agent uses OpenAI Codex with GPT-5.
+- Agent uses Claude Code (Codex removed 2026-05-19). See [AGENTS.md](AGENTS.md) for the canonical session-start protocol; this section retained only for the contract clauses below.
 - Full workspace file read/write access within workspace root.
 - Internet usage limited to official docs and primary sources.
 - Strict local system truthfulness: no claims without explicit tool outputs.
