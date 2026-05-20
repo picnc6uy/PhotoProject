@@ -37,7 +37,7 @@ class MetadataNormalizer:
             return None
         text = str(value).strip().upper()
         # Remove common separators and whitespace
-        text = re.sub(r"[\\s\\-_/\\.]+", "", text)
+        text = re.sub(r"[\s\-_/.]+", "", text)
 
         # Replace common OCR confusions when adjacent to digits
         def replace_confusable(ch, prev_is_digit, next_is_digit):

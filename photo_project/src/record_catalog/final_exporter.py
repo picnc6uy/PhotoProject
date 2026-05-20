@@ -69,7 +69,7 @@ def _extract_side_suffix(catalog: str) -> str:
 def _base_catalog_number(catalog: str) -> str:
     if not catalog:
         return catalog
-    return re.sub(r"([-\\s])([AB])$", "", catalog.strip(), flags=re.IGNORECASE).strip()
+    return re.sub(r"[-\s]([AB])$", "", catalog.strip(), flags=re.IGNORECASE).strip()
 
 
 def build_final_archival_catalog(input_csv: str, output_csv: str, consolidate: bool = True):
